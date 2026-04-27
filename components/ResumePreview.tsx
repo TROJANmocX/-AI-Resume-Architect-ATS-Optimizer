@@ -7,74 +7,127 @@ interface ResumePreviewProps {
 }
 
 export default function ResumePreview({ data }: ResumePreviewProps) {
-  const sections = [
-    { title: 'Education', key: 'academics', fields: ['school', 'degree', 'year'] },
-    { title: 'Work', key: 'experience', fields: ['title', 'company', 'date'] },
-    { title: 'Projects', key: 'projects', fields: ['name', 'description'] },
-    { title: 'Awards', key: 'awards', fields: ['name', 'giver'] },
-    { title: 'Certs', key: 'certifications', fields: ['name'] },
-    { title: 'Pubs', key: 'publications', fields: ['title', 'journal'] },
-    { title: 'Patents', key: 'patents', fields: ['title'] },
-    { title: 'Volunteering', key: 'volunteering', fields: ['role', 'org'] }
-  ];
-
   return (
     <div className="preview-container" style={{
       width: '100%',
       minHeight: '100%',
       background: 'white',
-      color: '#111',
+      color: '#000',
       padding: '40px',
-      fontSize: '10px',
-      lineHeight: '1.4',
-      boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-      fontFamily: 'serif',
-      transform: 'scale(1)',
-      transformOrigin: 'top center'
+      fontSize: '11px',
+      lineHeight: '1.5',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+      overflowY: 'auto'
     }}>
-      <div style={{ textAlign: 'center', borderBottom: '2px solid #000', paddingBottom: '10px', marginBottom: '15px' }}>
-        <h1 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{data.basic?.name || 'NAME'}</h1>
-        <div style={{ fontSize: '9px', marginTop: '4px', color: '#555' }}>
-          {data.basic?.email} | {data.basic?.phone} | {data.basic?.location}
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <h1 style={{ margin: '0 0 5px 0', fontSize: '20px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          {data.basic?.name || 'YOUR NAME'}
+        </h1>
+        <div style={{ fontSize: '10px', color: '#333' }}>
+          {data.basic?.location} | {data.basic?.phone} | {data.basic?.email}
         </div>
-      </div>
-
-      <div style={{ marginBottom: '15px' }}>
-        <div style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', marginBottom: '4px', fontSize: '9px', textTransform: 'uppercase' }}>Summary</div>
-        <p style={{ margin: 0 }}>{data.basic?.summary || 'Professional summary goes here...'}</p>
-      </div>
-
-      {sections.map(s => {
-        const items = data[s.key];
-        if (!items || items.length === 0) return null;
-        return (
-          <div key={s.key} style={{ marginBottom: '15px' }}>
-            <div style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', marginBottom: '6px', fontSize: '9px', textTransform: 'uppercase' }}>{s.title}</div>
-            {items.map((item: any, i: number) => (
-              <div key={i} style={{ marginBottom: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
-                  <span>{item[s.fields[0]]} {item[s.fields[1]] ? `@ ${item[s.fields[1]]}` : ''}</span>
-                  <span>{item[s.fields[2]]}</span>
-                </div>
-                {item.description && <p style={{ margin: '2px 0' }}>{item.description}</p>}
-                {item.bullets && (
-                  <ul style={{ paddingLeft: '15px', margin: '2px 0' }}>
-                    {item.bullets.map((b: string, j: number) => <li key={j}>{b}</li>)}
-                  </ul>
-                )}
-              </div>
-            ))}
+        {data.social?.length > 0 && (
+          <div style={{ fontSize: '10px', color: '#333', marginTop: '2px' }}>
+            {data.social.map((s:any) => s.url).join(' | ')}
           </div>
-        );
-      })}
-
-      <div>
-        <div style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', marginBottom: '6px', fontSize: '9px', textTransform: 'uppercase' }}>Skills & Languages</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-          {(data.skills || []).map((s: string) => <span key={s} style={{ background: '#f5f5f5', padding: '2px 6px', borderRadius: '3px' }}>{s}</span>)}
-          {(data.languages || []).map((l: string) => <span key={l} style={{ background: '#ebf5ff', padding: '2px 6px', borderRadius: '3px' }}>{l}</span>)}
-        </div>
+        )}
       </div>
+
+      {/* Summary */}
+      <div style={{ marginBottom: '15px' }}>
+        <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
+          Professional Summary
+        </div>
+        <p style={{ margin: 0, fontSize: '10.5px' }}>{data.basic?.summary || 'Craft a compelling summary...'}</p>
+      </div>
+
+      {/* Experience */}
+      {data.experience?.length > 0 && (
+        <div style={{ marginBottom: '15px' }}>
+          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '8px', fontSize: '11px' }}>
+            Professional Experience
+          </div>
+          {data.experience.map((exp: any, i: number) => (
+            <div key={i} style={{ marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '11px' }}>
+                <span>{exp.company}</span>
+                <span>{exp.date}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontStyle: 'italic', fontSize: '10.5px', color: '#333', marginBottom: '3px' }}>
+                <span>{exp.title}</span>
+              </div>
+              <ul style={{ paddingLeft: '18px', margin: '4px 0' }}>
+                {exp.bullets?.map((b: string, j: number) => (
+                  <li key={j} style={{ fontSize: '10.5px', marginBottom: '2px' }}>{b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Education */}
+      {data.academics?.length > 0 && (
+        <div style={{ marginBottom: '15px' }}>
+          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
+            Education
+          </div>
+          {data.academics.map((edu: any, i: number) => (
+            <div key={i} style={{ marginBottom: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '11px' }}>
+                <span>{edu.school}</span>
+                <span>{edu.year}</span>
+              </div>
+              <div style={{ fontStyle: 'italic', fontSize: '10.5px' }}>{edu.degree}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Projects */}
+      {data.projects?.length > 0 && (
+        <div style={{ marginBottom: '15px' }}>
+          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
+            Projects
+          </div>
+          {data.projects.map((proj: any, i: number) => (
+            <div key={i} style={{ marginBottom: '8px' }}>
+              <div style={{ fontWeight: 'bold', fontSize: '11px' }}>{proj.name}</div>
+              <p style={{ margin: '2px 0', fontSize: '10.5px' }}>{proj.description}</p>
+              {proj.bullets?.length > 0 && (
+                <ul style={{ paddingLeft: '18px', margin: '2px 0' }}>
+                  {proj.bullets.map((b: string, j: number) => (
+                    <li key={j} style={{ fontSize: '10.5px', marginBottom: '1px' }}>{b}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Skills */}
+      {(data.skills?.length > 0 || data.languages?.length > 0) && (
+        <div style={{ marginBottom: '15px' }}>
+          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
+            Technical Skills & Languages
+          </div>
+          <div style={{ fontSize: '10.5px' }}>
+            {data.skills?.length > 0 && (
+              <div style={{ marginBottom: '3px' }}>
+                <span style={{ fontWeight: 'bold' }}>Skills:</span> {data.skills.join(', ')}
+              </div>
+            )}
+            {data.languages?.length > 0 && (
+              <div>
+                <span style={{ fontWeight: 'bold' }}>Languages:</span> {data.languages.join(', ')}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
