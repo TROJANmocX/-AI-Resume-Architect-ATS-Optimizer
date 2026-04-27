@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { analyzeJobDescription } from '@/lib/openai';
+import { analyzeJobDescriptionWithGemini } from '@/lib/gemini';
+import { analyzeJobDescription as analyzeWithOpenAI } from '@/lib/openai';
 
 export async function POST(request: Request) {
   try {
@@ -9,8 +10,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Job description text is required' }, { status: 400 });
     }
 
-    const analysis = await analyzeJobDescription(jdText);
-    return NextResponse.json(analysis);
+    // Prefer Gemini if available, otherwise fallback to OpenAI
+    if (process.env.GEMINI_API_KEY) {
+      const analysis = await analyzeJobDescriptionWithGemini(jdText);
+      return NextResponse.json(analysis);
+    } else {
+      const analysis = await analyzeWithOpenAI(jdText);
+      return NextResponse.json(analysis);
+    }
   } catch (error) {
     console.error('JD Analysis error:', error);
     return NextResponse.json({ error: 'Failed to analyze job description' }, { status: 500 });
