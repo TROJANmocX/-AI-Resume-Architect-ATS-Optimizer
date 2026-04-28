@@ -1,0 +1,514 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.app { display: flex; height: 100vh; min-height: 600px; overflow: hidden; }
+
+.sidebar {
+  width: 220px; min-width: 220px;
+  border-right: 0.5px solid var(--color-border-tertiary);
+  background: var(--color-background-secondary);
+  display: flex; flex-direction: column;
+  padding: 16px 12px;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.sidebar-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  color: var(--color-text-tertiary); text-transform: uppercase;
+  padding: 4px 8px; margin-top: 8px;
+}
+
+.tmpl-btn {
+  background: none; border: 0.5px solid transparent;
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px; cursor: pointer;
+  text-align: left; width: 100%;
+  transition: all 0.15s;
+}
+.tmpl-btn:hover { background: var(--color-background-primary); border-color: var(--color-border-secondary); }
+.tmpl-btn.active { background: var(--color-background-primary); border-color: var(--color-border-primary); }
+.tmpl-btn-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); display: block; }
+.tmpl-btn-desc { font-size: 11px; color: var(--color-text-tertiary); display: block; margin-top: 2px; }
+
+.tmpl-badge {
+  display: inline-block; font-size: 10px; padding: 2px 7px;
+  border-radius: 999px; margin-top: 5px;
+  background: #E1F5EE; color: #0F6E56;
+}
+
+.action-btn {
+  margin-top: auto; padding: 9px 14px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: 13px; cursor: pointer; width: 100%;
+  color: var(--color-text-primary);
+  transition: background 0.15s;
+}
+.action-btn:hover { background: var(--color-background-secondary); }
+.action-btn.primary {
+  background: #1D9E75; color: #fff; border-color: transparent; margin-top: 8px;
+}
+.action-btn.primary:hover { background: #0F6E56; }
+
+.main { flex: 1; overflow-y: auto; padding: 24px; background: var(--color-background-tertiary); }
+
+.section-tabs {
+  display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.tab {
+  padding: 6px 14px; border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-tertiary);
+  background: var(--color-background-primary);
+  font-size: 12px; cursor: pointer; color: var(--color-text-secondary);
+  transition: all 0.15s;
+}
+.tab:hover { border-color: var(--color-border-secondary); color: var(--color-text-primary); }
+.tab.active { background: #1D9E75; color: #fff; border-color: transparent; }
+
+.editor-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.field-row.full { grid-template-columns: 1fr; }
+
+.field-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 4px; }
+input[type=text], textarea, select {
+  width: 100%; font-size: 13px; padding: 7px 10px;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  outline: none; resize: vertical;
+  transition: border-color 0.15s;
+}
+input[type=text]:focus, textarea:focus { border-color: #1D9E75; }
+textarea { min-height: 70px; }
+
+.entry-card {
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 14px; margin-bottom: 10px;
+  position: relative;
+}
+.entry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.entry-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.del-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--color-text-tertiary); font-size: 16px; line-height: 1;
+  padding: 2px 6px; border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.del-btn:hover { color: #E24B4A; background: #FCEBEB; }
+
+.add-btn {
+  width: 100%; padding: 8px; border: 0.5px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-md); background: none;
+  color: var(--color-text-tertiary); font-size: 13px; cursor: pointer;
+  transition: all 0.15s;
+}
+.add-btn:hover { border-color: #1D9E75; color: #1D9E75; background: #E1F5EE; }
+
+.preview-wrap {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+}
+
+.preview-title { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Resume preview styles */
+.resume { font-family: 'Georgia', serif; font-size: 12px; line-height: 1.5; color: #111; }
+.resume-t1 .rh { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 12px; }
+.resume-t1 .rh h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.resume-t1 .rh .contact { font-size: 11px; margin-top: 4px; color: #444; }
+.resume-t1 .rs h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #bbb; padding-bottom: 2px; margin: 14px 0 6px; }
+.resume-t1 .rs .entry-title-r { font-weight: 700; }
+.resume-t1 .rs .entry-sub { color: #555; font-size: 11px; }
+.resume-t1 .rs ul { padding-left: 14px; margin-top: 4px; }
+.resume-t1 .rs ul li { margin-bottom: 2px; }
+
+.resume-t2 { }
+.resume-t2 .rh { background: #1a2e3d; color: #fff; padding: 16px; margin: -24px -24px 16px; }
+.resume-t2 .rh h1 { font-size: 20px; font-weight: 700; font-family: var(--font-sans); }
+.resume-t2 .rh .contact { font-size: 11px; margin-top: 4px; color: #9bb5c8; }
+.resume-t2 .rs h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1a2e3d; border-left: 3px solid #1a2e3d; padding-left: 8px; margin: 14px 0 6px; }
+.resume-t2 .rs .entry-title-r { font-weight: 700; font-family: var(--font-sans); font-size: 12px; }
+.resume-t2 .rs .entry-sub { color: #555; font-size: 11px; font-family: var(--font-sans); }
+.resume-t2 .rs ul { padding-left: 14px; margin-top: 4px; font-family: var(--font-sans); }
+.resume-t2 .rs ul li { margin-bottom: 2px; }
+
+.resume-t3 { display: grid; grid-template-columns: 160px 1fr; gap: 0; }
+.resume-t3 .r-left { background: #f5f5f3; padding: 14px; font-family: var(--font-sans); }
+.resume-t3 .r-right { padding: 14px; }
+.resume-t3 .rh { margin-bottom: 16px; }
+.resume-t3 .rh h1 { font-size: 18px; font-weight: 700; font-family: var(--font-sans); line-height: 1.2; }
+.resume-t3 .rh .contact { font-size: 10px; margin-top: 6px; color: #555; line-height: 1.7; }
+.resume-t3 .sl-h { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555; margin: 12px 0 5px; }
+.resume-t3 .skill-pill { display: inline-block; background: #e8e8e5; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin: 2px 2px 2px 0; }
+.resume-t3 .rs h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin: 12px 0 6px; color: #333; font-family: var(--font-sans); }
+.resume-t3 .rs .entry-title-r { font-weight: 700; font-family: var(--font-sans); font-size: 12px; }
+.resume-t3 .rs .entry-sub { color: #555; font-size: 10px; font-family: var(--font-sans); }
+.resume-t3 .rs ul { padding-left: 13px; margin-top: 3px; font-family: var(--font-sans); font-size: 11px; }
+.resume-t3 .rs ul li { margin-bottom: 2px; }
+
+.ats-tip {
+  background: #E1F5EE; border-radius: var(--border-radius-md);
+  padding: 10px 14px; font-size: 12px; color: #0F6E56;
+  margin-bottom: 16px;
+}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);padding:0 8px 8px;">Resume Templates</div>
+    <div class="sidebar-label">ATS-Friendly</div>
+    <button class="tmpl-btn active" onclick="setTemplate(0)">
+      <span class="tmpl-btn-name">Classic Pro</span>
+      <span class="tmpl-btn-desc">Clean, single-column</span>
+      <span class="tmpl-badge">Most ATS Safe</span>
+    </button>
+    <button class="tmpl-btn" onclick="setTemplate(1)">
+      <span class="tmpl-btn-name">Modern Executive</span>
+      <span class="tmpl-btn-desc">Bold header, structured</span>
+      <span class="tmpl-badge">ATS Friendly</span>
+    </button>
+    <button class="tmpl-btn" onclick="setTemplate(2)">
+      <span class="tmpl-btn-name">Two-Column Clean</span>
+      <span class="tmpl-btn-desc">Skills sidebar, compact</span>
+      <span class="tmpl-badge">ATS Friendly</span>
+    </button>
+
+    <div class="sidebar-label" style="margin-top:16px;">Sections</div>
+    <button class="tab" style="text-align:left;width:100%;margin:0;" onclick="showSection('header')">Contact Info</button>
+    <button class="tab" style="text-align:left;width:100%;margin:0;" onclick="showSection('summary')">Summary</button>
+    <button class="tab" style="text-align:left;width:100%;margin:0;" onclick="showSection('experience')">Experience</button>
+    <button class="tab" style="text-align:left;width:100%;margin:0;" onclick="showSection('education')">Education</button>
+    <button class="tab" style="text-align:left;width:100%;margin:0;" onclick="showSection('skills')">Skills</button>
+
+    <button class="action-btn" onclick="exportResume()">Export as HTML ↗</button>
+    <button class="action-btn primary" onclick="sendPromptAI()">Optimize with AI ↗</button>
+  </div>
+
+  <div class="main" id="main-panel">
+    <div class="ats-tip">
+      ATS tip: Use standard section names (Experience, Education, Skills). Avoid tables, images, or text boxes. Stick to standard fonts.
+    </div>
+
+    <div class="section-tabs" id="section-tabs">
+      <button class="tab active" onclick="showSection('header')">Contact Info</button>
+      <button class="tab" onclick="showSection('summary')">Summary</button>
+      <button class="tab" onclick="showSection('experience')">Experience</button>
+      <button class="tab" onclick="showSection('education')">Education</button>
+      <button class="tab" onclick="showSection('skills')">Skills</button>
+      <button class="tab" onclick="showSection('preview')">Preview</button>
+    </div>
+
+    <div id="section-header" class="editor-card">
+      <div style="font-size:13px;font-weight:500;margin-bottom:14px;color:var(--color-text-secondary);">Contact Information</div>
+      <div class="field-row">
+        <div><div class="field-label">Full Name</div><input type="text" id="f-name" value="Alexandra Chen" oninput="updatePreview()"></div>
+        <div><div class="field-label">Job Title</div><input type="text" id="f-title" value="Senior Product Manager" oninput="updatePreview()"></div>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">Email</div><input type="text" id="f-email" value="alex.chen@email.com" oninput="updatePreview()"></div>
+        <div><div class="field-label">Phone</div><input type="text" id="f-phone" value="+1 (555) 012-3456" oninput="updatePreview()"></div>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">Location</div><input type="text" id="f-location" value="San Francisco, CA" oninput="updatePreview()"></div>
+        <div><div class="field-label">LinkedIn / Website</div><input type="text" id="f-linkedin" value="linkedin.com/in/alexchen" oninput="updatePreview()"></div>
+      </div>
+    </div>
+
+    <div id="section-summary" class="editor-card" style="display:none;">
+      <div style="font-size:13px;font-weight:500;margin-bottom:14px;color:var(--color-text-secondary);">Professional Summary</div>
+      <div class="field-label">Summary (2-4 sentences, include keywords from the JD)</div>
+      <textarea id="f-summary" rows="4" oninput="updatePreview()">Results-driven Senior Product Manager with 8+ years of experience leading cross-functional teams to deliver high-impact SaaS products. Proven track record of driving 40% revenue growth through data-driven roadmap prioritization and agile methodologies. Expert in stakeholder management, A/B testing, and go-to-market strategy across B2B and B2C segments.</textarea>
+    </div>
+
+    <div id="section-experience" style="display:none;">
+      <div id="exp-entries"></div>
+      <button class="add-btn" onclick="addExp()">+ Add Experience</button>
+    </div>
+
+    <div id="section-education" style="display:none;">
+      <div id="edu-entries"></div>
+      <button class="add-btn" onclick="addEdu()">+ Add Education</button>
+    </div>
+
+    <div id="section-skills" class="editor-card" style="display:none;">
+      <div style="font-size:13px;font-weight:500;margin-bottom:14px;color:var(--color-text-secondary);">Skills (comma-separated)</div>
+      <div class="field-label">Technical Skills</div>
+      <textarea id="f-skills-tech" rows="2" oninput="updatePreview()">Product Roadmapping, SQL, Tableau, JIRA, Confluence, A/B Testing, Google Analytics, Mixpanel</textarea>
+      <div style="height:10px;"></div>
+      <div class="field-label">Soft Skills / Other</div>
+      <textarea id="f-skills-soft" rows="2" oninput="updatePreview()">Stakeholder Management, Agile/Scrum, Team Leadership, Strategic Planning, Data Analysis, Cross-functional Collaboration</textarea>
+    </div>
+
+    <div id="section-preview" style="display:none;">
+      <div class="preview-wrap">
+        <div class="preview-title">Live Preview — Template <span id="prev-tname">1: Classic Pro</span></div>
+        <div id="resume-preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentTemplate = 0;
+let currentSection = 'header';
+
+const templateNames = ['1: Classic Pro', '2: Modern Executive', '3: Two-Column Clean'];
+
+const expData = [
+  { company: 'TechCorp Inc.', title: 'Senior Product Manager', dates: 'Jan 2021 – Present', location: 'San Francisco, CA',
+    bullets: ['Led cross-functional team of 12 engineers and designers to launch 3 major product features, increasing MAU by 35%.','Defined and executed product roadmap aligned with company OKRs, resulting in $2.4M ARR growth in FY2023.','Conducted 50+ user interviews and synthesized insights to drive a 22% improvement in user retention.'] },
+  { company: 'StartupXYZ', title: 'Product Manager', dates: 'Mar 2018 – Dec 2020', location: 'New York, NY',
+    bullets: ['Owned end-to-end product lifecycle for core B2B SaaS platform serving 200+ enterprise clients.','Collaborated with sales and marketing to develop go-to-market strategy, achieving 120% of annual revenue target.'] }
+];
+
+const eduData = [
+  { school: 'UC Berkeley', degree: 'B.S. Computer Science', dates: '2014 – 2018', gpa: '3.8 GPA' }
+];
+
+function renderExpEntries() {
+  const c = document.getElementById('exp-entries');
+  c.innerHTML = expData.map((e, i) => `
+    <div class="entry-card">
+      <div class="entry-header">
+        <span class="entry-title">${e.company || 'New Entry'}</span>
+        <button class="del-btn" onclick="delExp(${i})">×</button>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">Company</div><input type="text" value="${e.company}" oninput="expData[${i}].company=this.value;updatePreview();renderExpTitle(${i})"></div>
+        <div><div class="field-label">Job Title</div><input type="text" value="${e.title}" oninput="expData[${i}].title=this.value;updatePreview()"></div>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">Dates</div><input type="text" value="${e.dates}" oninput="expData[${i}].dates=this.value;updatePreview()"></div>
+        <div><div class="field-label">Location</div><input type="text" value="${e.location}" oninput="expData[${i}].location=this.value;updatePreview()"></div>
+      </div>
+      <div class="field-label">Bullet Points (one per line — start with action verbs!)</div>
+      <textarea rows="4" oninput="expData[${i}].bullets=this.value.split('\\n').filter(b=>b.trim());updatePreview()">${e.bullets.join('\n')}</textarea>
+    </div>
+  `).join('');
+}
+
+function renderExpTitle(i) {
+  const titles = document.querySelectorAll('#exp-entries .entry-title');
+  if(titles[i]) titles[i].textContent = expData[i].company || 'New Entry';
+}
+
+function renderEduEntries() {
+  const c = document.getElementById('edu-entries');
+  c.innerHTML = eduData.map((e, i) => `
+    <div class="entry-card">
+      <div class="entry-header">
+        <span class="entry-title">${e.school || 'New Entry'}</span>
+        <button class="del-btn" onclick="delEdu(${i})">×</button>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">School / University</div><input type="text" value="${e.school}" oninput="eduData[${i}].school=this.value;updatePreview()"></div>
+        <div><div class="field-label">Degree</div><input type="text" value="${e.degree}" oninput="eduData[${i}].degree=this.value;updatePreview()"></div>
+      </div>
+      <div class="field-row">
+        <div><div class="field-label">Dates</div><input type="text" value="${e.dates}" oninput="eduData[${i}].dates=this.value;updatePreview()"></div>
+        <div><div class="field-label">GPA / Honors (optional)</div><input type="text" value="${e.gpa||''}" oninput="eduData[${i}].gpa=this.value;updatePreview()"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addExp() { expData.push({company:'',title:'',dates:'',location:'',bullets:['']}); renderExpEntries(); updatePreview(); }
+function delExp(i) { expData.splice(i,1); renderExpEntries(); updatePreview(); }
+function addEdu() { eduData.push({school:'',degree:'',dates:'',gpa:''}); renderEduEntries(); updatePreview(); }
+function delEdu(i) { eduData.splice(i,1); renderEduEntries(); updatePreview(); }
+
+function getData() {
+  return {
+    name: document.getElementById('f-name').value,
+    title: document.getElementById('f-title').value,
+    email: document.getElementById('f-email').value,
+    phone: document.getElementById('f-phone').value,
+    location: document.getElementById('f-location').value,
+    linkedin: document.getElementById('f-linkedin').value,
+    summary: document.getElementById('f-summary').value,
+    skillsTech: document.getElementById('f-skills-tech').value,
+    skillsSoft: document.getElementById('f-skills-soft').value,
+  };
+}
+
+function buildContactLine(d) {
+  return [d.email, d.phone, d.location, d.linkedin].filter(Boolean).join(' | ');
+}
+
+function buildBullets(bullets) {
+  return bullets.map(b => `<li>${b}</li>`).join('');
+}
+
+function buildExpSection(cls) {
+  return expData.map(e => `
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <span class="entry-title-r">${e.title}${e.company ? ', ' + e.company : ''}</span>
+        <span class="entry-sub">${e.dates}</span>
+      </div>
+      <div class="entry-sub">${e.location}</div>
+      <ul>${buildBullets(e.bullets)}</ul>
+    </div>
+  `).join('');
+}
+
+function buildEduSection() {
+  return eduData.map(e => `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+      <div>
+        <span class="entry-title-r">${e.degree}</span><br>
+        <span class="entry-sub">${e.school}${e.gpa ? ' — ' + e.gpa : ''}</span>
+      </div>
+      <span class="entry-sub">${e.dates}</span>
+    </div>
+  `).join('');
+}
+
+function buildSkillsLine(d) {
+  const all = [d.skillsTech, d.skillsSoft].filter(Boolean).join(', ');
+  return all;
+}
+
+function buildSkillPills(d) {
+  const all = [d.skillsTech, d.skillsSoft].filter(Boolean).join(',').split(',').map(s=>s.trim()).filter(Boolean);
+  return all.map(s => `<span class="skill-pill">${s}</span>`).join('');
+}
+
+const templates = [
+  (d) => `
+    <div class="resume resume-t1">
+      <div class="rh rs">
+        <h1>${d.name}</h1>
+        <div class="contact">${d.title} &nbsp;|&nbsp; ${buildContactLine(d)}</div>
+      </div>
+      <div class="rs">
+        <h2>Professional Summary</h2>
+        <p>${d.summary}</p>
+        <h2>Experience</h2>
+        ${buildExpSection('t1')}
+        <h2>Education</h2>
+        ${buildEduSection()}
+        <h2>Skills</h2>
+        <p>${buildSkillsLine(d)}</p>
+      </div>
+    </div>
+  `,
+  (d) => `
+    <div class="resume resume-t2">
+      <div class="rh">
+        <h1>${d.name}</h1>
+        <div class="contact">${d.title} &nbsp;·&nbsp; ${buildContactLine(d)}</div>
+      </div>
+      <div class="rs">
+        <h2>Summary</h2>
+        <p style="font-family:var(--font-sans);font-size:12px;">${d.summary}</p>
+        <h2>Experience</h2>
+        ${buildExpSection('t2')}
+        <h2>Education</h2>
+        ${buildEduSection()}
+        <h2>Core Skills</h2>
+        <p style="font-family:var(--font-sans);font-size:12px;">${buildSkillsLine(d)}</p>
+      </div>
+    </div>
+  `,
+  (d) => `
+    <div class="resume resume-t3">
+      <div class="r-left">
+        <div style="margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:700;line-height:1.2;">${d.name}</div>
+          <div style="font-size:11px;color:#555;margin-top:3px;">${d.title}</div>
+        </div>
+        <div class="sl-h">Contact</div>
+        <div style="font-size:10px;color:#555;line-height:1.8;">${d.email}<br>${d.phone}<br>${d.location}<br>${d.linkedin}</div>
+        <div class="sl-h">Skills</div>
+        <div>${buildSkillPills(d)}</div>
+        <div class="sl-h">Summary</div>
+        <div style="font-size:10px;color:#444;line-height:1.6;">${d.summary}</div>
+      </div>
+      <div class="r-right">
+        <div class="rs">
+          <h2>Experience</h2>
+          ${buildExpSection('t3')}
+          <h2>Education</h2>
+          ${buildEduSection()}
+        </div>
+      </div>
+    </div>
+  `
+];
+
+function updatePreview() {
+  const prev = document.getElementById('resume-preview');
+  if(!prev) return;
+  const d = getData();
+  prev.innerHTML = templates[currentTemplate](d);
+}
+
+function setTemplate(idx) {
+  currentTemplate = idx;
+  document.querySelectorAll('.tmpl-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.getElementById('prev-tname').textContent = templateNames[idx];
+  updatePreview();
+  if(currentSection !== 'preview') showSection('preview');
+}
+
+function showSection(name) {
+  currentSection = name;
+  ['header','summary','experience','education','skills','preview'].forEach(s => {
+    const el = document.getElementById('section-' + s);
+    if(el) el.style.display = s === name ? '' : 'none';
+  });
+  document.querySelectorAll('.section-tabs .tab').forEach(t => {
+    t.classList.toggle('active', t.textContent.toLowerCase().includes(name) || (name==='header' && t.textContent==='Contact Info'));
+  });
+  if(name === 'experience') { renderExpEntries(); }
+  if(name === 'education') { renderEduEntries(); }
+  if(name === 'preview') { updatePreview(); }
+}
+
+function exportResume() {
+  const d = getData();
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${d.name} Resume</title><style>
+body{font-family:Georgia,serif;font-size:12px;line-height:1.5;color:#111;max-width:780px;margin:40px auto;padding:0 32px;}
+h1{font-size:22px;font-weight:700;} h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #bbb;padding-bottom:2px;margin:14px 0 6px;}
+ul{padding-left:14px;} li{margin-bottom:2px;} .contact{font-size:11px;color:#444;margin-top:4px;} .rh{border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:12px;}
+.flex{display:flex;justify-content:space-between;align-items:baseline;} .sub{color:#555;font-size:11px;}
+</style></head><body>
+<div class="rh"><h1>${d.name}</h1><div class="contact">${d.title} | ${buildContactLine(d)}</div></div>
+<h2>Professional Summary</h2><p>${d.summary}</p>
+<h2>Experience</h2>${expData.map(e=>`<div style="margin-bottom:10px;"><div class="flex"><b>${e.title}, ${e.company}</b><span class="sub">${e.dates}</span></div><div class="sub">${e.location}</div><ul>${e.bullets.map(b=>`<li>${b}</li>`).join('')}</ul></div>`).join('')}
+<h2>Education</h2>${eduData.map(e=>`<div class="flex"><div><b>${e.degree}</b><br><span class="sub">${e.school}${e.gpa?' — '+e.gpa:''}</span></div><span class="sub">${e.dates}</span></div>`).join('')}
+<h2>Skills</h2><p>${buildSkillsLine(d)}</p>
+</body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = (d.name.replace(/\s+/g,'_') || 'Resume') + '.html';
+  a.click();
+}
+
+function sendPromptAI() {
+  sendPrompt('I want to use the AI resume optimizer. Please help me upload my resume and paste a job description so you can rewrite my bullet points to match the JD keywords and optimize for ATS.');
+}
+
+renderExpEntries();
+renderEduEntries();
+updatePreview();
+showSection('preview');
+</script>

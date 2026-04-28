@@ -2,132 +2,277 @@
 
 import React from 'react';
 
-interface ResumePreviewProps {
-  data: any;
-}
+export default function ResumePreview({ data, templateId = 0 }: { data: any, templateId?: number }) {
+  const buildContactLine = () => {
+    return [data?.basic?.email, data?.basic?.phone, data?.basic?.location, data?.basic?.linkedin].filter(Boolean).join(' | ');
+  };
 
-export default function ResumePreview({ data }: ResumePreviewProps) {
-  return (
-    <div className="preview-container" style={{
-      width: '100%',
-      minHeight: '100%',
-      background: 'white',
-      color: '#000',
-      padding: '40px',
-      fontSize: '11px',
-      lineHeight: '1.5',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-      overflowY: 'auto'
-    }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <h1 style={{ margin: '0 0 5px 0', fontSize: '20px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          {data.basic?.name || 'YOUR NAME'}
-        </h1>
-        <div style={{ fontSize: '10px', color: '#333' }}>
-          {data.basic?.location} | {data.basic?.phone} | {data.basic?.email}
+  const buildSkillsLine = () => {
+    const tech = data?.skills?.map((s:any) => s.name).join(', ');
+    const lang = data?.languages?.map((s:any) => s.name).join(', ');
+    return [tech, lang].filter(Boolean).join(' • ');
+  };
+
+  const buildSkillPills = () => {
+    const all = [
+      ...(data?.skills?.map((s:any) => s.name) || []),
+      ...(data?.languages?.map((s:any) => s.name) || [])
+    ].filter(Boolean);
+    return all.map((s, idx) => (
+      <span key={idx} className="skill-pill">
+        {s}
+      </span>
+    ));
+  };
+
+  const ClassicPro = () => (
+    <div className="resume resume-t1">
+      <div className="rh rs">
+        <h1>{data?.basic?.name || 'Your Name'}</h1>
+        <div className="contact">
+          {data?.experience?.[0]?.title || 'Job Title'} &nbsp;|&nbsp; {buildContactLine()}
         </div>
-        {data.social?.length > 0 && (
-          <div style={{ fontSize: '10px', color: '#333', marginTop: '2px' }}>
-            {data.social.map((s:any) => s.url).join(' | ')}
+      </div>
+      <div className="rs">
+        {data?.basic?.summary && (
+            <>
+                <h2>Professional Summary</h2>
+                <p>{data.basic.summary}</p>
+            </>
+        )}
+        
+        {data?.experience?.length > 0 && <h2>Experience</h2>}
+        {data?.experience?.map((e: any, idx: number) => (
+          <div key={idx} style={{ marginBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <span className="entry-title-r">
+                {e.title}
+                {e.company ? ', ' + e.company : ''}
+              </span>
+              <span className="entry-sub">{e.date}</span>
+            </div>
+            <ul>
+              {e.bullets?.map((b: string, i: number) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
           </div>
+        ))}
+
+        {data?.academics?.length > 0 && <h2>Education</h2>}
+        {data?.academics?.map((e: any, idx: number) => (
+          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+            <div>
+              <span className="entry-title-r">{e.degree || e.detail}</span>
+              <br />
+              <span className="entry-sub">
+                {e.school || e.name}
+              </span>
+            </div>
+            <span className="entry-sub">{e.year || e.date}</span>
+          </div>
+        ))}
+
+        {(data?.skills?.length > 0 || data?.languages?.length > 0) && <h2>Skills</h2>}
+        <p>{buildSkillsLine()}</p>
+        
+        {data?.projects?.length > 0 && <h2>Projects</h2>}
+        {data?.projects?.map((p: any, idx: number) => (
+          <div key={idx} style={{ marginBottom: '10px' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span className="entry-title-r">{p.name}</span>
+                <span className="entry-sub">{p.date}</span>
+             </div>
+             <div className="entry-sub">{p.detail}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const ModernExecutive = () => (
+    <div className="resume resume-t2">
+      <div className="rh">
+        <h1>{data?.basic?.name || 'Your Name'}</h1>
+        <div className="contact">
+          {data?.experience?.[0]?.title || 'Job Title'} &nbsp;&middot;&nbsp; {buildContactLine()}
+        </div>
+      </div>
+      <div className="rs">
+        {data?.basic?.summary && (
+            <>
+                <h2>Summary</h2>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px' }}>{data.basic.summary}</p>
+            </>
+        )}
+        
+        {data?.experience?.length > 0 && <h2>Experience</h2>}
+        {data?.experience?.map((e: any, idx: number) => (
+          <div key={idx} style={{ marginBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <span className="entry-title-r">
+                {e.title}
+                {e.company ? ', ' + e.company : ''}
+              </span>
+              <span className="entry-sub">{e.date}</span>
+            </div>
+            <ul>
+              {e.bullets?.map((b: string, i: number) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        
+        {data?.academics?.length > 0 && <h2>Education</h2>}
+        {data?.academics?.map((e: any, idx: number) => (
+          <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+            <div>
+              <span className="entry-title-r">{e.degree || e.detail}</span>
+              <br />
+              <span className="entry-sub">
+                {e.school || e.name}
+              </span>
+            </div>
+            <span className="entry-sub">{e.year || e.date}</span>
+          </div>
+        ))}
+        
+        {(data?.skills?.length > 0 || data?.languages?.length > 0) && <h2>Core Skills</h2>}
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px' }}>{buildSkillsLine()}</p>
+        
+        {data?.projects?.length > 0 && <h2>Projects</h2>}
+        {data?.projects?.map((p: any, idx: number) => (
+          <div key={idx} style={{ marginBottom: '10px' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span className="entry-title-r">{p.name}</span>
+                <span className="entry-sub">{p.date}</span>
+             </div>
+             <div className="entry-sub" style={{ fontFamily: 'var(--font-sans)' }}>{p.detail}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const TwoColumnClean = () => (
+    <div className="resume resume-t3">
+      <div className="r-left">
+        <div style={{ marginBottom: '12px' }}>
+          <div style={{ fontSize: '18px', fontWeight: 700, lineHeight: 1.2 }}>{data?.basic?.name || 'Your Name'}</div>
+          <div style={{ fontSize: '11px', color: '#555', marginTop: '3px' }}>{data?.experience?.[0]?.title || 'Job Title'}</div>
+        </div>
+        <div className="sl-h">Contact</div>
+        <div style={{ fontSize: '10px', color: '#555', lineHeight: 1.8 }}>
+          {data?.basic?.email && <div>{data.basic.email}</div>}
+          {data?.basic?.phone && <div>{data.basic.phone}</div>}
+          {data?.basic?.location && <div>{data.basic.location}</div>}
+          {data?.social?.[0]?.detail && <div>{data.social[0].detail}</div>}
+        </div>
+        {(data?.skills?.length > 0 || data?.languages?.length > 0) && (
+            <>
+                <div className="sl-h">Skills</div>
+                <div>{buildSkillPills()}</div>
+            </>
+        )}
+        {data?.basic?.summary && (
+            <>
+                <div className="sl-h">Summary</div>
+                <div style={{ fontSize: '10px', color: '#444', lineHeight: 1.6 }}>{data.basic.summary}</div>
+            </>
         )}
       </div>
-
-      {/* Summary */}
-      <div style={{ marginBottom: '15px' }}>
-        <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
-          Professional Summary
-        </div>
-        <p style={{ margin: 0, fontSize: '10.5px' }}>{data.basic?.summary || 'Craft a compelling summary...'}</p>
-      </div>
-
-      {/* Experience */}
-      {data.experience?.length > 0 && (
-        <div style={{ marginBottom: '15px' }}>
-          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '8px', fontSize: '11px' }}>
-            Professional Experience
-          </div>
-          {data.experience.map((exp: any, i: number) => (
-            <div key={i} style={{ marginBottom: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '11px' }}>
-                <span>{exp.company}</span>
-                <span>{exp.date}</span>
+      <div className="r-right">
+        <div className="rs">
+          {data?.experience?.length > 0 && <h2>Experience</h2>}
+          {data?.experience?.map((e: any, idx: number) => (
+            <div key={idx} style={{ marginBottom: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span className="entry-title-r">
+                  {e.title}
+                  {e.company ? ', ' + e.company : ''}
+                </span>
+                <span className="entry-sub">{e.date}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontStyle: 'italic', fontSize: '10.5px', color: '#333', marginBottom: '3px' }}>
-                <span>{exp.title}</span>
-              </div>
-              <ul style={{ paddingLeft: '18px', margin: '4px 0' }}>
-                {exp.bullets?.map((b: string, j: number) => (
-                  <li key={j} style={{ fontSize: '10.5px', marginBottom: '2px' }}>{b}</li>
+              <ul>
+                {e.bullets?.map((b: string, i: number) => (
+                  <li key={i}>{b}</li>
                 ))}
               </ul>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Education */}
-      {data.academics?.length > 0 && (
-        <div style={{ marginBottom: '15px' }}>
-          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
-            Education
-          </div>
-          {data.academics.map((edu: any, i: number) => (
-            <div key={i} style={{ marginBottom: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '11px' }}>
-                <span>{edu.school}</span>
-                <span>{edu.year}</span>
-              </div>
-              <div style={{ fontStyle: 'italic', fontSize: '10.5px' }}>{edu.degree}</div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Projects */}
-      {data.projects?.length > 0 && (
-        <div style={{ marginBottom: '15px' }}>
-          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
-            Projects
-          </div>
-          {data.projects.map((proj: any, i: number) => (
-            <div key={i} style={{ marginBottom: '8px' }}>
-              <div style={{ fontWeight: 'bold', fontSize: '11px' }}>{proj.name}</div>
-              <p style={{ margin: '2px 0', fontSize: '10.5px' }}>{proj.description}</p>
-              {proj.bullets?.length > 0 && (
-                <ul style={{ paddingLeft: '18px', margin: '2px 0' }}>
-                  {proj.bullets.map((b: string, j: number) => (
-                    <li key={j} style={{ fontSize: '10.5px', marginBottom: '1px' }}>{b}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Skills */}
-      {(data.skills?.length > 0 || data.languages?.length > 0) && (
-        <div style={{ marginBottom: '15px' }}>
-          <div style={{ fontWeight: 'bold', borderBottom: '1.5px solid #000', textTransform: 'uppercase', marginBottom: '6px', fontSize: '11px' }}>
-            Technical Skills & Languages
-          </div>
-          <div style={{ fontSize: '10.5px' }}>
-            {data.skills?.length > 0 && (
-              <div style={{ marginBottom: '3px' }}>
-                <span style={{ fontWeight: 'bold' }}>Skills:</span> {data.skills.join(', ')}
-              </div>
-            )}
-            {data.languages?.length > 0 && (
+          
+          {data?.academics?.length > 0 && <h2>Education</h2>}
+          {data?.academics?.map((e: any, idx: number) => (
+            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
               <div>
-                <span style={{ fontWeight: 'bold' }}>Languages:</span> {data.languages.join(', ')}
+                <span className="entry-title-r">{e.degree || e.detail}</span>
+                <br />
+                <span className="entry-sub">
+                  {e.school || e.name}
+                </span>
               </div>
-            )}
-          </div>
+              <span className="entry-sub">{e.year || e.date}</span>
+            </div>
+          ))}
+          
+          {data?.projects?.length > 0 && <h2>Projects</h2>}
+          {data?.projects?.map((p: any, idx: number) => (
+            <div key={idx} style={{ marginBottom: '10px' }}>
+               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span className="entry-title-r">{p.name}</span>
+                  <span className="entry-sub">{p.date}</span>
+               </div>
+               <div className="entry-sub" style={{ fontFamily: 'var(--font-sans)' }}>{p.detail}</div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </div>
+  );
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .resume { font-family: 'Georgia', serif; font-size: 12px; line-height: 1.5; color: #111; }
+        .resume-t1 .rh { border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 12px; }
+        .resume-t1 .rh h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
+        .resume-t1 .rh .contact { font-size: 11px; margin-top: 4px; color: #444; }
+        .resume-t1 .rs h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #bbb; padding-bottom: 2px; margin: 14px 0 6px; }
+        .resume-t1 .rs .entry-title-r { font-weight: 700; }
+        .resume-t1 .rs .entry-sub { color: #555; font-size: 11px; }
+        .resume-t1 .rs ul { padding-left: 14px; margin-top: 4px; }
+        .resume-t1 .rs ul li { margin-bottom: 2px; }
+
+        .resume-t2 { }
+        .resume-t2 .rh { background: #1a2e3d; color: #fff; padding: 16px; margin: -24px -24px 16px; }
+        .resume-t2 .rh h1 { font-size: 20px; font-weight: 700; font-family: var(--font-sans); margin: 0; }
+        .resume-t2 .rh .contact { font-size: 11px; margin-top: 4px; color: #9bb5c8; }
+        .resume-t2 .rs h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1a2e3d; border-left: 3px solid #1a2e3d; padding-left: 8px; margin: 14px 0 6px; }
+        .resume-t2 .rs .entry-title-r { font-weight: 700; font-family: var(--font-sans); font-size: 12px; }
+        .resume-t2 .rs .entry-sub { color: #555; font-size: 11px; font-family: var(--font-sans); }
+        .resume-t2 .rs ul { padding-left: 14px; margin-top: 4px; font-family: var(--font-sans); }
+        .resume-t2 .rs ul li { margin-bottom: 2px; }
+
+        .resume-t3 { display: grid; grid-template-columns: 160px 1fr; gap: 0; min-height: 100%; }
+        .resume-t3 .r-left { background: #f5f5f3; padding: 14px; font-family: var(--font-sans); }
+        .resume-t3 .r-right { padding: 14px; }
+        .resume-t3 .rh { margin-bottom: 16px; }
+        .resume-t3 .rh h1 { font-size: 18px; font-weight: 700; font-family: var(--font-sans); line-height: 1.2; margin: 0; }
+        .resume-t3 .rh .contact { font-size: 10px; margin-top: 6px; color: #555; line-height: 1.7; }
+        .resume-t3 .sl-h { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555; margin: 12px 0 5px; }
+        .resume-t3 .skill-pill { display: inline-block; background: #e8e8e5; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin: 2px 2px 2px 0; }
+        .resume-t3 .rs h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin: 12px 0 6px; color: #333; font-family: var(--font-sans); }
+        .resume-t3 .rs .entry-title-r { font-weight: 700; font-family: var(--font-sans); font-size: 12px; }
+        .resume-t3 .rs .entry-sub { color: #555; font-size: 10px; font-family: var(--font-sans); }
+        .resume-t3 .rs ul { padding-left: 13px; margin-top: 3px; font-family: var(--font-sans); font-size: 11px; }
+        .resume-t3 .rs ul li { margin-bottom: 2px; }
+      `}} />
+      <div style={{ background: 'white', color: 'black', minHeight: '100%', padding: templateId === 2 ? 0 : '24px' }}>
+        {templateId === 0 && <ClassicPro />}
+        {templateId === 1 && <ModernExecutive />}
+        {templateId === 2 && <TwoColumnClean />}
+      </div>
+    </>
   );
 }

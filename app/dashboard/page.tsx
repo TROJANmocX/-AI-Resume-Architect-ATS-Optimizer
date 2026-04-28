@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [isRewriting, setIsRewriting] = useState<string | null>(null);
   const [showSaved, setShowSaved] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [currentTemplate, setCurrentTemplate] = useState(0);
 
   // Resume State
   const [resume, setResume] = useState<any>(RESUME_TEMPLATES.indian_professional);
@@ -176,7 +177,12 @@ export default function Dashboard() {
         {/* 50% DYNAMIC EDITOR PANEL */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid #111', scrollbarWidth: 'none' }}>
             <div className="animate-fade-in" key={activeTab}>
-                <h2 style={{ fontSize: '2rem', fontWeight: 950, marginBottom: '2.5rem', letterSpacing: '-0.02em' }}>{SECTIONS.find(s => s.id === activeTab)?.label} <span className="text-gradient">Module</span></h2>
+                <h2 style={{ fontSize: '2rem', fontWeight: 950, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>{SECTIONS.find(s => s.id === activeTab)?.label} <span className="text-gradient">Module</span></h2>
+
+                <div style={{ background: 'rgba(0,186,255,0.05)', border: '1px solid rgba(0,186,255,0.2)', padding: '1rem 1.5rem', borderRadius: '1rem', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <AlertCircle size={20} color="#00BAFF" />
+                    <span style={{ fontSize: '0.85rem', color: '#00BAFF', fontWeight: 500 }}>ATS TIP: Use standard phrasing, avoid complex tables or graphs, and tailor keywords directly from the AI Strategy module.</span>
+                </div>
 
                 {activeTab === 'jd' && (
                     <>
@@ -196,32 +202,58 @@ export default function Dashboard() {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>LEGAL NAME</label>
-                                <input value={resume.basic?.name} onChange={(e) => updateSection('basic', {...resume.basic, name: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
+                                <input value={resume.basic?.name || ''} onChange={(e) => updateSection('basic', {...resume.basic, name: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>CONTACT EMAIL</label>
-                                <input value={resume.basic?.email} onChange={(e) => updateSection('basic', {...resume.basic, email: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
+                                <input value={resume.basic?.email || ''} onChange={(e) => updateSection('basic', {...resume.basic, email: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
                             </div>
                         </div>
-                        <textarea value={resume.basic?.summary} onChange={(e) => updateSection('basic', {...resume.basic, summary: e.target.value})} placeholder="Strategic Professional Brief..." className="glass" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #111', color: '#fff', minHeight: '300px', resize: 'none', lineHeight: 1.8, background: 'transparent' }} />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>PHONE NUMBER</label>
+                                <input value={resume.basic?.phone || ''} onChange={(e) => updateSection('basic', {...resume.basic, phone: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>LOCATION</label>
+                                <input value={resume.basic?.location || ''} onChange={(e) => updateSection('basic', {...resume.basic, location: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>LINKEDIN / PORTFOLIO</label>
+                            <input value={resume.basic?.linkedin || ''} onChange={(e) => updateSection('basic', {...resume.basic, linkedin: e.target.value})} className="glass" style={{ padding: '1.1rem', borderRadius: '1rem', border: '1px solid #111', color: '#fff', background: 'transparent' }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>PROFESSIONAL SUMMARY</label>
+                            <textarea value={resume.basic?.summary || ''} onChange={(e) => updateSection('basic', {...resume.basic, summary: e.target.value})} placeholder="Strategic Professional Brief..." className="glass" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #111', color: '#fff', minHeight: '200px', resize: 'vertical', lineHeight: 1.8, background: 'transparent' }} />
+                        </div>
                     </div>
                 )}
 
                 {activeTab === 'experience' && (
                     <>
-                        <button onClick={() => addEntry('experience', { company: '', title: '', date: '', bullets: [''] })} className="btn btn-secondary" style={{ marginBottom: '2rem' }}><Plus size={16} /> New Node</button>
+                        <button onClick={() => addEntry('experience', { company: '', title: '', date: '', location: '', bullets: [''] })} className="btn btn-secondary" style={{ marginBottom: '2rem' }}><Plus size={16} /> New Node</button>
                         {resume.experience?.map((exp: any, i: number) => (
                             <div key={i} style={{ padding: '2.5rem', borderRadius: '2rem', border: '1px solid #111', marginBottom: '2rem', position: 'relative' }}>
                                 <Trash2 onClick={() => removeEntry('experience', i)} size={18} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: '#222', cursor: 'pointer' }} />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                    <input value={exp.company || ''} onChange={(e) => updateEntry('experience', i, 'company', e.target.value)} placeholder="Organization" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                    <input value={exp.title || ''} onChange={(e) => updateEntry('experience', i, 'title', e.target.value)} placeholder="Architectural Role" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-                                    <input value={exp.company} onChange={(e) => updateEntry('experience', i, 'company', e.target.value)} placeholder="Organization" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
-                                    <input value={exp.title} onChange={(e) => updateEntry('experience', i, 'title', e.target.value)} placeholder="Architectural Role" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                    <input value={exp.date || ''} onChange={(e) => updateEntry('experience', i, 'date', e.target.value)} placeholder="Duration (e.g. Jan 2020 - Present)" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                    <input value={exp.location || ''} onChange={(e) => updateEntry('experience', i, 'location', e.target.value)} placeholder="Location" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                     {exp.bullets?.map((b: string, j: number) => (
-                                        <textarea key={j} value={b} onChange={(e) => {
-                                            const nb = [...exp.bullets]; nb[j] = e.target.value; updateEntry('experience', i, 'bullets', nb);
-                                        }} style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid #111', color: '#888', borderRadius: '0.8rem' }} />
+                                        <div key={j} style={{ position: 'relative' }}>
+                                            <textarea value={b} onChange={(e) => {
+                                                const nb = [...exp.bullets]; nb[j] = e.target.value; updateEntry('experience', i, 'bullets', nb);
+                                            }} placeholder="Achieved X by implementing Y, resulting in Z..." style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid #111', color: '#888', borderRadius: '0.8rem', minHeight: '80px', resize: 'vertical' }} />
+                                            <X onClick={() => {
+                                                const nb = [...exp.bullets]; nb.splice(j, 1); updateEntry('experience', i, 'bullets', nb);
+                                            }} size={14} style={{ position: 'absolute', top: '1rem', right: '1rem', color: '#444', cursor: 'pointer' }} />
+                                        </div>
                                     ))}
                                     <button onClick={() => updateEntry('experience', i, 'bullets', [...exp.bullets, ''])} className="btn btn-secondary">+ Append Achievement</button>
                                 </div>
@@ -230,15 +262,47 @@ export default function Dashboard() {
                     </>
                 )}
 
-                {/* UNIVERSAL EDITOR FOR ALL OTHER 13+ MODULES */}
-                {!['jd', 'basic', 'experience'].includes(activeTab) && (
+                {activeTab === 'academics' && (
+                    <>
+                        <button onClick={() => addEntry('academics', { school: '', degree: '', year: '', gpa: '' })} className="btn btn-secondary" style={{ marginBottom: '2rem' }}><Plus size={16} /> New Node</button>
+                        {resume.academics?.map((edu: any, i: number) => (
+                            <div key={i} style={{ padding: '2.5rem', borderRadius: '2rem', border: '1px solid #111', marginBottom: '2rem', position: 'relative' }}>
+                                <Trash2 onClick={() => removeEntry('academics', i)} size={18} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: '#222', cursor: 'pointer' }} />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                    <input value={edu.school || edu.name || ''} onChange={(e) => updateEntry('academics', i, 'school', e.target.value)} placeholder="Institution" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                    <input value={edu.degree || edu.detail || ''} onChange={(e) => updateEntry('academics', i, 'degree', e.target.value)} placeholder="Degree" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                                    <input value={edu.year || edu.date || ''} onChange={(e) => updateEntry('academics', i, 'year', e.target.value)} placeholder="Dates" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                    <input value={edu.gpa || ''} onChange={(e) => updateEntry('academics', i, 'gpa', e.target.value)} placeholder="GPA / Honors" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                )}
+
+                {activeTab === 'skills' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>TECHNICAL SKILLS (Comma Separated)</label>
+                            <textarea value={resume.skills?.map((s:any) => s.name).join(', ') || ''} onChange={(e) => updateSection('skills', e.target.value.split(',').map(s => ({name: s.trim()})))} className="glass" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #111', color: '#fff', minHeight: '120px', resize: 'vertical', lineHeight: 1.8, background: 'transparent' }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#444', fontWeight: 900 }}>SOFT SKILLS & LINGUISTIC (Comma Separated)</label>
+                            <textarea value={resume.languages?.map((l:any) => l.name).join(', ') || ''} onChange={(e) => updateSection('languages', e.target.value.split(',').map(s => ({name: s.trim()})))} className="glass" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #111', color: '#fff', minHeight: '120px', resize: 'vertical', lineHeight: 1.8, background: 'transparent' }} />
+                        </div>
+                    </div>
+                )}
+
+                {/* UNIVERSAL EDITOR FOR ALL OTHER 12+ MODULES */}
+                {!['jd', 'basic', 'experience', 'academics', 'skills'].includes(activeTab) && (
                     <>
                         <button onClick={() => addEntry(activeTab, { name: '', detail: '', date: '' })} className="btn btn-secondary" style={{ marginBottom: '2rem' }}><Plus size={16} /> New Entry</button>
                         {resume[activeTab]?.map((item: any, i: number) => (
                             <div key={i} style={{ padding: '1.5rem', borderRadius: '1.25rem', border: '1px solid #1a1a1a', marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <input value={item.name} onChange={(e) => updateEntry(activeTab, i, 'name', e.target.value)} placeholder="Name / Title" style={{ flex: 2, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
-                                <input value={item.detail} onChange={(e) => updateEntry(activeTab, i, 'detail', e.target.value)} placeholder="Detail / Provider" style={{ flex: 1, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
-                                <input value={item.date} onChange={(e) => updateEntry(activeTab, i, 'date', e.target.value)} placeholder="Year / Score" style={{ flex: 1, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
+                                <input value={item.name || ''} onChange={(e) => updateEntry(activeTab, i, 'name', e.target.value)} placeholder="Name / Title" style={{ flex: 2, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
+                                <input value={item.detail || ''} onChange={(e) => updateEntry(activeTab, i, 'detail', e.target.value)} placeholder="Detail / Provider" style={{ flex: 1, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
+                                <input value={item.date || ''} onChange={(e) => updateEntry(activeTab, i, 'date', e.target.value)} placeholder="Year / Score" style={{ flex: 1, padding: '0.8rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.6rem' }} />
                                 <Trash2 onClick={() => removeEntry(activeTab, i)} size={18} style={{ color: '#222', cursor: 'pointer' }} />
                             </div>
                         ))}
@@ -249,8 +313,8 @@ export default function Dashboard() {
 
         {/* 50% REAL-TIME ATS PREVIEW */}
         <div style={{ flex: 1, overflowY: 'auto', background: '#0a0a0a', padding: '4rem', display: 'flex', justifyContent: 'center', borderLeft: '1px solid #111' }}>
-            <div style={{ width: '100%', maxWidth: '750px', height: 'fit-content', boxShadow: '0 60px 180px rgba(0,0,0,1)', borderRadius: '4px' }}>
-                <ResumePreview data={resume} />
+            <div style={{ width: '100%', maxWidth: '750px', height: 'fit-content', boxShadow: '0 60px 180px rgba(0,0,0,1)', borderRadius: '4px', overflow: 'hidden' }}>
+                <ResumePreview data={resume} templateId={currentTemplate} />
             </div>
         </div>
 
@@ -265,13 +329,17 @@ export default function Dashboard() {
                     <X onClick={() => setShowTemplateModal(false)} style={{ cursor: 'pointer' }} />
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                    <div onClick={() => { setResume(RESUME_TEMPLATES.indian_professional); setShowTemplateModal(false); saveToStorage(RESUME_TEMPLATES.indian_professional); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem' }}>
-                        <h4 style={{ color: '#00BAFF' }}>Indian Executive</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Localized for IIT/NIT/Tier-1 Tech Markets.</p>
+                    <div onClick={() => { setCurrentTemplate(0); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 0 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
+                        <h4 style={{ color: '#00BAFF' }}>Classic Pro</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Clean, single-column. Most ATS Safe.</p>
                     </div>
-                    <div onClick={() => { setResume(RESUME_TEMPLATES.software_engineer); setShowTemplateModal(false); saveToStorage(RESUME_TEMPLATES.software_engineer); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem' }}>
-                        <h4 style={{ color: '#00BAFF' }}>Global Tech Catalyst</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>FAANG & International Remote Standards.</p>
+                    <div onClick={() => { setCurrentTemplate(1); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 1 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
+                        <h4 style={{ color: '#00BAFF' }}>Modern Executive</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Bold header, structured. ATS Friendly.</p>
+                    </div>
+                    <div onClick={() => { setCurrentTemplate(2); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 2 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
+                        <h4 style={{ color: '#00BAFF' }}>Two-Column Clean</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Skills sidebar, compact. ATS Friendly.</p>
                     </div>
                 </div>
             </div>
