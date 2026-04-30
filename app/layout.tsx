@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import SplashScreen from "@/components/SplashScreen";
 
 export const metadata: Metadata = {
   title: "CareerForge Pro | ATS-Proof Resume Generator",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <SplashScreen>
+          {children}
+        </SplashScreen>
       </body>
     </html>
   );

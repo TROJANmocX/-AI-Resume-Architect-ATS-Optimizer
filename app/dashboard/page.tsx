@@ -155,21 +155,23 @@ export default function Dashboard() {
   };
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#060B14', overflow: 'hidden', position: 'relative' }}>
-      <div className="animate-breathe" style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(0, 186, 255, 0.08) 0%, transparent 70%)', filter: 'blur(100px)', zIndex: 0, animationDelay: '0s' }} />
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#0B0F1A', overflow: 'hidden', position: 'relative' }}>
+      {/* Ambient orbs */}
+      <div className="animate-breathe" style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(124,92,255,0.12) 0%, transparent 70%)', filter: 'blur(120px)', zIndex: 0 }} />
+      <div className="animate-breathe" style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)', filter: 'blur(120px)', zIndex: 0, animationDelay: '3s' }} />
       <div className="grain" style={{ zIndex: 1 }} />
       
       {/* EXECUTIVE TOP BAR */}
-      <div style={{ padding: '0.75rem 2rem', background: 'rgba(6, 11, 20, 0.8)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100 }}>
+      <div style={{ padding: '0.75rem 2rem', background: 'rgba(11,15,26,0.85)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(124,92,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <h1 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#fff', letterSpacing: '-0.04em', margin: 0 }}>CareerForge <span className="text-gradient">Studio</span></h1>
+            <h1 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#fff', letterSpacing: '-0.04em', margin: 0 }}>CareerForge <span style={{ background: 'linear-gradient(135deg, #7C5CFF, #00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Studio</span></h1>
           </Link>
           {showSaved && <span className="save-pulse" style={{ fontSize: '0.6rem', color: '#00FF94', fontWeight: 950 }}>ENCRYPTED & SYNCED</span>}
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-           <button className="btn btn-secondary" onClick={() => setShowTemplateModal(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Change Template</button>
-           <button className="btn btn-primary" onClick={downloadPDF} disabled={isDownloading} style={{ padding: '0.5rem 2rem', fontSize: '0.85rem' }}>
+           <button className="btn btn-secondary" onClick={() => setShowTemplateModal(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', borderColor: 'rgba(124,92,255,0.2)' }}>Change Template</button>
+           <button className="btn" onClick={downloadPDF} disabled={isDownloading} style={{ padding: '0.5rem 2rem', fontSize: '0.85rem', background: 'linear-gradient(135deg,#7C5CFF,#9B7CFF)', color: '#fff', borderRadius: '0.75rem' }}>
               {isDownloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} EXPORT PDF
            </button>
         </div>
@@ -177,35 +179,36 @@ export default function Dashboard() {
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         
-        {/* FULL 16-FEATURE SCROLLABLE SIDEBAR */}
-        <div style={{ width: '80px', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '1rem', background: 'transparent', overflowY: 'auto', scrollbarWidth: 'none', zIndex: 10 }}>
+        {/* SIDEBAR */}
+        <div style={{ width: '80px', borderRight: '1px solid rgba(124,92,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '1rem', background: 'transparent', overflowY: 'auto', scrollbarWidth: 'none', zIndex: 10 }}>
             {SECTIONS.map(s => (
                 <button 
                   key={s.id}
                   onClick={() => setActiveTab(s.id)}
                   style={{
                     width: '48px', height: '48px', minHeight: '48px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: activeTab === s.id ? 'rgba(0,186,255,0.1)' : 'transparent',
-                    border: 'none', color: activeTab === s.id ? '#00BAFF' : '#444', cursor: 'pointer', transition: 'all 0.2s',
+                    background: activeTab === s.id ? 'rgba(124,92,255,0.12)' : 'transparent',
+                    border: activeTab === s.id ? '1px solid rgba(124,92,255,0.3)' : '1px solid transparent',
+                    color: activeTab === s.id ? '#9B7CFF' : '#555', cursor: 'pointer', transition: 'all 0.2s',
                     position: 'relative'
                   }}
                   title={s.label}
                 >
                   {s.icon}
-                  {activeTab === s.id && <div style={{ position: 'absolute', left: '-5px', width: '3px', height: '20px', background: '#00BAFF', borderRadius: '2px' }} />}
+                  {activeTab === s.id && <div className="sidebar-indicator" style={{ position: 'absolute', left: '-5px', width: '3px', height: '20px', background: '#7C5CFF', borderRadius: '2px', boxShadow: '0 0 8px rgba(124,92,255,0.8)' }} />}
                 </button>
             ))}
             <div style={{ height: '2rem', minHeight: '2rem' }} />
         </div>
 
-        {/* 50% DYNAMIC EDITOR PANEL */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid rgba(255,255,255,0.05)', scrollbarWidth: 'none', zIndex: 10 }}>
+        {/* EDITOR PANEL */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid rgba(124,92,255,0.1)', scrollbarWidth: 'none', zIndex: 10 }}>
             <div className="animate-fade-in" key={activeTab}>
-                <h2 style={{ fontSize: '2rem', fontWeight: 950, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>{SECTIONS.find(s => s.id === activeTab)?.label} <span className="text-gradient">Module</span></h2>
+                <h2 style={{ fontSize: '2rem', fontWeight: 950, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>{SECTIONS.find(s => s.id === activeTab)?.label} <span style={{ background: 'linear-gradient(135deg, #7C5CFF, #00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Module</span></h2>
 
-                <div style={{ background: 'rgba(0,186,255,0.05)', border: '1px solid rgba(0,186,255,0.2)', padding: '1rem 1.5rem', borderRadius: '1rem', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <AlertCircle size={20} color="#00BAFF" />
-                    <span style={{ fontSize: '0.85rem', color: '#00BAFF', fontWeight: 500 }}>ATS TIP: Use standard phrasing, avoid complex tables or graphs, and tailor keywords directly from the AI Strategy module.</span>
+                <div style={{ background: 'rgba(124,92,255,0.06)', border: '1px solid rgba(124,92,255,0.2)', padding: '1rem 1.5rem', borderRadius: '1rem', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <AlertCircle size={20} color="#9B7CFF" />
+                    <span style={{ fontSize: '0.85rem', color: '#9B7CFF', fontWeight: 500 }}>ATS TIP: Use standard phrasing, avoid complex tables or graphs, and tailor keywords directly from the AI Strategy module.</span>
                 </div>
 
                 {activeTab === 'jd' && (
@@ -345,8 +348,8 @@ export default function Dashboard() {
             </div>
         </div>
 
-        {/* 50% REAL-TIME ATS PREVIEW */}
-        <div style={{ flex: 1, overflowY: 'auto', background: 'rgba(0,0,0,0.3)', padding: '4rem', display: 'flex', justifyContent: 'center', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 10 }}>
+        {/* REAL-TIME ATS PREVIEW */}
+        <div style={{ flex: 1, overflowY: 'auto', background: 'rgba(0,0,0,0.25)', padding: '4rem', display: 'flex', justifyContent: 'center', borderLeft: '1px solid rgba(124,92,255,0.1)', position: 'relative', zIndex: 10 }}>
             <div ref={previewRef} style={{ width: '100%', maxWidth: '750px', height: 'fit-content', boxShadow: '0 60px 180px rgba(0,0,0,1)', borderRadius: '4px', overflow: 'hidden' }}>
                 <ResumePreview data={resume} templateId={currentTemplate} />
             </div>
@@ -354,14 +357,14 @@ export default function Dashboard() {
             {/* FIT TO ONE PAGE WARNING */}
             <div style={{
                 position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 100,
-                background: isOverPageLimit ? 'rgba(255, 60, 60, 0.1)' : 'rgba(0, 186, 255, 0.1)',
-                border: isOverPageLimit ? '1px solid rgba(255, 60, 60, 0.3)' : '1px solid rgba(0, 186, 255, 0.3)',
+                background: isOverPageLimit ? 'rgba(255, 0, 85, 0.1)' : 'rgba(124, 92, 255, 0.1)',
+                border: isOverPageLimit ? '1px solid rgba(255,0,85,0.3)' : '1px solid rgba(124,92,255,0.3)',
                 padding: '0.75rem 1.25rem', borderRadius: '2rem',
                 display: 'flex', alignItems: 'center', gap: '0.75rem',
                 backdropFilter: 'blur(12px)', transition: 'all 0.3s'
             }}>
-                {isOverPageLimit ? <AlertCircle size={16} color="#ff3c3c" /> : <CheckCircle size={16} color="#00BAFF" />}
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isOverPageLimit ? '#ff3c3c' : '#00BAFF' }}>
+                {isOverPageLimit ? <AlertCircle size={16} color="#FF0055" /> : <CheckCircle size={16} color="#7C5CFF" />}
+                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isOverPageLimit ? '#FF0055' : '#9B7CFF' }}>
                     {isOverPageLimit ? "⚠️ Spilling to Page 2" : "1 Page (ATS Optimal)"}
                 </span>
             </div>
@@ -371,24 +374,24 @@ export default function Dashboard() {
 
       {/* TEMPLATE ENGINE OVERLAY */}
       {showTemplateModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.98)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(30px)' }}>
-            <div className="glass-card" style={{ width: '90%', maxWidth: '750px', padding: '4rem', borderRadius: '2.5rem' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(11,15,26,0.95)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(30px)' }}>
+            <div className="glass-auth-card" style={{ width: '90%', maxWidth: '750px', padding: '4rem', borderRadius: '2.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3rem' }}>
-                    <h2 style={{ fontSize: '2rem', fontWeight: 900 }}>Resume <span className="text-gradient">Architectures</span></h2>
-                    <X onClick={() => setShowTemplateModal(false)} style={{ cursor: 'pointer' }} />
+                    <h2 style={{ fontSize: '2rem', fontWeight: 900 }}>Resume <span style={{ background: 'linear-gradient(135deg,#7C5CFF,#00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Architectures</span></h2>
+                    <X onClick={() => setShowTemplateModal(false)} style={{ cursor: 'pointer', color: '#666' }} />
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                    <div onClick={() => { setCurrentTemplate(0); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 0 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
-                        <h4 style={{ color: '#00BAFF' }}>Classic Pro</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Clean, single-column. Most ATS Safe.</p>
+                    <div onClick={() => { setCurrentTemplate(0); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 0 ? '1px solid rgba(124,92,255,0.5)' : '1px solid rgba(255,255,255,0.06)', borderRadius: '1.5rem', background: currentTemplate === 0 ? 'rgba(124,92,255,0.1)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
+                        <h4 style={{ color: '#9B7CFF' }}>Classic Pro</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.5rem' }}>Clean, single-column. Most ATS Safe.</p>
                     </div>
-                    <div onClick={() => { setCurrentTemplate(1); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 1 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
-                        <h4 style={{ color: '#00BAFF' }}>Modern Executive</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Bold header, structured. ATS Friendly.</p>
+                    <div onClick={() => { setCurrentTemplate(1); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 1 ? '1px solid rgba(124,92,255,0.5)' : '1px solid rgba(255,255,255,0.06)', borderRadius: '1.5rem', background: currentTemplate === 1 ? 'rgba(124,92,255,0.1)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
+                        <h4 style={{ color: '#9B7CFF' }}>Modern Executive</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.5rem' }}>Bold header, structured. ATS Friendly.</p>
                     </div>
-                    <div onClick={() => { setCurrentTemplate(2); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: '1px solid #222', borderRadius: '1.5rem', background: currentTemplate === 2 ? 'rgba(0,186,255,0.1)' : 'transparent' }}>
-                        <h4 style={{ color: '#00BAFF' }}>Two-Column Clean</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>Skills sidebar, compact. ATS Friendly.</p>
+                    <div onClick={() => { setCurrentTemplate(2); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 2 ? '1px solid rgba(124,92,255,0.5)' : '1px solid rgba(255,255,255,0.06)', borderRadius: '1.5rem', background: currentTemplate === 2 ? 'rgba(124,92,255,0.1)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
+                        <h4 style={{ color: '#9B7CFF' }}>Two-Column Clean</h4>
+                        <p style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.5rem' }}>Skills sidebar, compact. ATS Friendly.</p>
                     </div>
                 </div>
             </div>
