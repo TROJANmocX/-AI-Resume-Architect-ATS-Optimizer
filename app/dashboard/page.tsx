@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import ResumePreview from "@/components/ResumePreview";
 import { RESUME_TEMPLATES } from "@/lib/templates";
 import { 
@@ -23,10 +23,33 @@ export default function Dashboard() {
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [currentTemplate, setCurrentTemplate] = useState(0);
 
+  // Pagination Warning State
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [isOverPageLimit, setIsOverPageLimit] = useState(false);
+
   // Resume State
   const [resume, setResume] = useState<any>(RESUME_TEMPLATES.indian_professional);
   const [jdText, setJdText] = useState("");
   const [analysis, setAnalysis] = useState<any>(null);
+
+  // Pagination Height Checker
+  useEffect(() => {
+    if (!previewRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        // A4 ratio at 750px width is ~1060px height
+        setIsOverPageLimit(entry.contentRect.height > 1060);
+      }
+    });
+    observer.observe(previewRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const WEAK_VERBS = ['helped', 'worked on', 'did', 'made', 'managed', 'assisted', 'responsible for', 'handled', 'was'];
+  const getWeakVerbs = (text: string) => {
+    const lower = text.toLowerCase();
+    return WEAK_VERBS.filter(v => lower.includes(v));
+  };
 
   // Load from local storage
   useEffect(() => {
@@ -132,11 +155,12 @@ export default function Dashboard() {
   };
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#000', overflow: 'hidden' }}>
-      <div className="grain" />
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#060B14', overflow: 'hidden', position: 'relative' }}>
+      <div className="animate-breathe" style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(0, 186, 255, 0.08) 0%, transparent 70%)', filter: 'blur(100px)', zIndex: 0, animationDelay: '0s' }} />
+      <div className="grain" style={{ zIndex: 1 }} />
       
       {/* EXECUTIVE TOP BAR */}
-      <div style={{ padding: '0.75rem 2rem', background: '#000', borderBottom: '1px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100 }}>
+      <div style={{ padding: '0.75rem 2rem', background: 'rgba(6, 11, 20, 0.8)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <h1 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#fff', letterSpacing: '-0.04em', margin: 0 }}>CareerForge <span className="text-gradient">Studio</span></h1>
@@ -154,7 +178,7 @@ export default function Dashboard() {
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         
         {/* FULL 16-FEATURE SCROLLABLE SIDEBAR */}
-        <div style={{ width: '80px', borderRight: '1px solid #111', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '1rem', background: '#000', overflowY: 'auto', scrollbarWidth: 'none' }}>
+        <div style={{ width: '80px', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '1rem', background: 'transparent', overflowY: 'auto', scrollbarWidth: 'none', zIndex: 10 }}>
             {SECTIONS.map(s => (
                 <button 
                   key={s.id}
@@ -175,7 +199,7 @@ export default function Dashboard() {
         </div>
 
         {/* 50% DYNAMIC EDITOR PANEL */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid #111', scrollbarWidth: 'none' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid rgba(255,255,255,0.05)', scrollbarWidth: 'none', zIndex: 10 }}>
             <div className="animate-fade-in" key={activeTab}>
                 <h2 style={{ fontSize: '2rem', fontWeight: 950, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>{SECTIONS.find(s => s.id === activeTab)?.label} <span className="text-gradient">Module</span></h2>
 
@@ -245,16 +269,26 @@ export default function Dashboard() {
                                     <input value={exp.location || ''} onChange={(e) => updateEntry('experience', i, 'location', e.target.value)} placeholder="Location" style={{ padding: '1rem', background: 'transparent', border: '1px solid #111', color: 'white', borderRadius: '0.8rem' }} />
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {exp.bullets?.map((b: string, j: number) => (
+                                    {exp.bullets?.map((b: string, j: number) => {
+                                        const weak = getWeakVerbs(b);
+                                        return (
                                         <div key={j} style={{ position: 'relative' }}>
-                                            <textarea value={b} onChange={(e) => {
+                                            <textarea className="glass" value={b} onChange={(e) => {
                                                 const nb = [...exp.bullets]; nb[j] = e.target.value; updateEntry('experience', i, 'bullets', nb);
-                                            }} placeholder="Achieved X by implementing Y, resulting in Z..." style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid #111', color: '#888', borderRadius: '0.8rem', minHeight: '80px', resize: 'vertical' }} />
+                                            }} placeholder="Achieved X by implementing Y, resulting in Z..." style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '0.8rem', minHeight: '80px', resize: 'vertical' }} />
                                             <X onClick={() => {
                                                 const nb = [...exp.bullets]; nb.splice(j, 1); updateEntry('experience', i, 'bullets', nb);
                                             }} size={14} style={{ position: 'absolute', top: '1rem', right: '1rem', color: '#444', cursor: 'pointer' }} />
+                                            {weak.length > 0 && (
+                                                <div className="animate-fade-in" style={{ marginTop: '0.5rem', padding: '0.75rem', background: 'rgba(255, 170, 0, 0.1)', border: '1px solid rgba(255, 170, 0, 0.2)', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <AlertCircle size={14} color="#ffaa00" />
+                                                    <span style={{ fontSize: '0.75rem', color: '#ffaa00', fontWeight: 500 }}>
+                                                        Weak verb detected: "{weak[0]}". Try using strong action verbs like <b>Engineered</b>, <b>Spearheaded</b>, or <b>Optimized</b>.
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
-                                    ))}
+                                    )})}
                                     <button onClick={() => updateEntry('experience', i, 'bullets', [...exp.bullets, ''])} className="btn btn-secondary">+ Append Achievement</button>
                                 </div>
                             </div>
@@ -312,9 +346,24 @@ export default function Dashboard() {
         </div>
 
         {/* 50% REAL-TIME ATS PREVIEW */}
-        <div style={{ flex: 1, overflowY: 'auto', background: '#0a0a0a', padding: '4rem', display: 'flex', justifyContent: 'center', borderLeft: '1px solid #111' }}>
-            <div style={{ width: '100%', maxWidth: '750px', height: 'fit-content', boxShadow: '0 60px 180px rgba(0,0,0,1)', borderRadius: '4px', overflow: 'hidden' }}>
+        <div style={{ flex: 1, overflowY: 'auto', background: 'rgba(0,0,0,0.3)', padding: '4rem', display: 'flex', justifyContent: 'center', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 10 }}>
+            <div ref={previewRef} style={{ width: '100%', maxWidth: '750px', height: 'fit-content', boxShadow: '0 60px 180px rgba(0,0,0,1)', borderRadius: '4px', overflow: 'hidden' }}>
                 <ResumePreview data={resume} templateId={currentTemplate} />
+            </div>
+            
+            {/* FIT TO ONE PAGE WARNING */}
+            <div style={{
+                position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 100,
+                background: isOverPageLimit ? 'rgba(255, 60, 60, 0.1)' : 'rgba(0, 186, 255, 0.1)',
+                border: isOverPageLimit ? '1px solid rgba(255, 60, 60, 0.3)' : '1px solid rgba(0, 186, 255, 0.3)',
+                padding: '0.75rem 1.25rem', borderRadius: '2rem',
+                display: 'flex', alignItems: 'center', gap: '0.75rem',
+                backdropFilter: 'blur(12px)', transition: 'all 0.3s'
+            }}>
+                {isOverPageLimit ? <AlertCircle size={16} color="#ff3c3c" /> : <CheckCircle size={16} color="#00BAFF" />}
+                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isOverPageLimit ? '#ff3c3c' : '#00BAFF' }}>
+                    {isOverPageLimit ? "⚠️ Spilling to Page 2" : "1 Page (ATS Optimal)"}
+                </span>
             </div>
         </div>
 
