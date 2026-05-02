@@ -114,8 +114,8 @@ export async function POST(request: Request) {
             <div class="section">
                 <div class="section-title">Technical Skills & Languages</div>
                 <div class="skills-box">
-                    ${data.skills?.length ? `<div><span class="skill-label">Skills:</span> ${data.skills.join(', ')}</div>` : ''}
-                    ${data.languages?.length ? `<div><span class="skill-label">Languages:</span> ${data.languages.join(', ')}</div>` : ''}
+                    ${data.skills?.length ? `<div><span class="skill-label">Skills:</span> ${data.skills.map((s:any) => s.name || s).join(', ')}</div>` : ''}
+                    ${data.languages?.length ? `<div><span class="skill-label">Languages:</span> ${data.languages.map((s:any) => s.name || s).join(', ')}</div>` : ''}
                 </div>
             </div>
           ` : ''}
@@ -140,14 +140,14 @@ export async function POST(request: Request) {
     `);
 
     const pdf = await page.pdf({
-      format: 'Letter', // US Letter is better for ATS in the US, A4 for EU. We'll stick to Letter/A4
+      format: 'A4',
       printBackground: true,
       margin: { top: '0.4in', right: '0.4in', bottom: '0.4in', left: '0.4in' }
     });
 
     await browser.close();
 
-    return new Response(pdf, {
+    return new Response(pdf as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename=ATS_Optimized_Resume.pdf'

@@ -1,7 +1,11 @@
-import { NextResponse } from 'next/server';
+"use client";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { Suspense } from 'react';
+
+function CheckoutStatusContent() {
+  const searchParams = useSearchParams();
   const success = searchParams.get('success');
 
   return (
@@ -28,17 +32,26 @@ export async function GET(request: Request) {
         <p style={{ color: '#888', marginBottom: '2rem' }}>
           {success ? 'Welcome to CareerForge Pro. Your unlimited access is now unlocked.' : 'Something went wrong with the payment process.'}
         </p>
-        <a href="/dashboard" style={{ 
+        <Link href="/dashboard" style={{ 
           padding: '1rem 2rem', 
           background: 'linear-gradient(135deg, #00BAFF, #0072FF)', 
           color: 'white', 
           textDecoration: 'none', 
           borderRadius: '0.75rem',
-          fontWeight: 600
+          fontWeight: 600,
+          display: 'inline-block'
         }}>
           Return to Dashboard
-        </a>
+        </Link>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutStatus() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0a0a0a' }}></div>}>
+      <CheckoutStatusContent />
+    </Suspense>
   );
 }

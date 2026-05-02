@@ -137,7 +137,7 @@ export default function Navbar() {
               <div style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'linear-gradient(135deg, #FF0055, #FF8800)', color: '#fff', fontSize: '0.6rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', letterSpacing: '1px', boxShadow: '0 0 10px rgba(255,0,85,0.5)', zIndex: 10 }}>
                 FREE
               </div>
-              <Link href="/dashboard" className="btn btn-primary-intense" style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', borderRadius: '0.75rem', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+              <Link href="/login" className="btn btn-primary-intense" style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', borderRadius: '0.75rem', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                 Fix My Resume Now <ArrowRight size={16} style={{ marginLeft: '0.5rem' }} />
               </Link>
             </div>

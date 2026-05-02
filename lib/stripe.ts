@@ -5,7 +5,7 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 // Only initialize Stripe if the key is present to avoid runtime crashes
 export const stripe = STRIPE_SECRET_KEY 
   ? new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: '2025-01-27-ac',
+      apiVersion: '2025-01-27.ac' as any,
     })
   : null;
 

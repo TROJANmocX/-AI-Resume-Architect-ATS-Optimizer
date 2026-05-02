@@ -245,7 +245,7 @@ export default function ResumePreview({ data, templateId = 0 }: { data: any, tem
         .resume-t1 .rs ul li { margin-bottom: 2px; }
 
         .resume-t2 { }
-        .resume-t2 .rh { background: #1a2e3d; color: #fff; padding: 16px; margin: -24px -24px 16px; }
+        .resume-t2 .rh { background: #1a2e3d; color: #fff; padding: 20px 24px; margin: -56px -64px 20px; }
         .resume-t2 .rh h1 { font-size: 20px; font-weight: 700; font-family: var(--font-sans); margin: 0; }
         .resume-t2 .rh .contact { font-size: 11px; margin-top: 4px; color: #9bb5c8; }
         .resume-t2 .rs h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #1a2e3d; border-left: 3px solid #1a2e3d; padding-left: 8px; margin: 14px 0 6px; }
@@ -268,7 +268,16 @@ export default function ResumePreview({ data, templateId = 0 }: { data: any, tem
         .resume-t3 .rs ul { padding-left: 13px; margin-top: 3px; font-family: var(--font-sans); font-size: 11px; }
         .resume-t3 .rs ul li { margin-bottom: 2px; }
       `}} />
-      <div style={{ background: 'white', color: 'black', minHeight: '100%', padding: templateId === 2 ? 0 : '24px' }}>
+      {/* A4 at 96dpi = 794 × 1123 px. Margins: 18mm ≈ 68px top/bottom, 20mm ≈ 76px left/right */}
+      <div style={{
+        background: 'white',
+        color: 'black',
+        width: '794px',
+        minHeight: '1123px',
+        boxSizing: 'border-box',
+        padding: templateId === 2 ? 0 : '56px 64px',
+        position: 'relative',
+      }}>
         {templateId === 0 && <ClassicPro />}
         {templateId === 1 && <ModernExecutive />}
         {templateId === 2 && <TwoColumnClean />}
