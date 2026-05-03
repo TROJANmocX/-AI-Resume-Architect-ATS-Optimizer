@@ -1,72 +1,56 @@
 import Navbar from "@/components/Navbar";
-import { Check, Zap } from "lucide-react";
+import { Check } from "lucide-react";
 import { PLANS } from "@/lib/stripe";
 
 export default function Pricing() {
   return (
-    <main style={{ minHeight: '100vh', paddingBottom: '6rem' }}>
+    <main style={{ minHeight: '100vh', paddingBottom: '8rem', background: 'var(--background)' }}>
       <Navbar />
       
-      <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '10rem', paddingInline: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>Elevate Your <span className="text-gradient">Career</span></h1>
-        <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '1.25rem', marginBottom: '4rem' }}>
-          Choose the plan that fits your job search needs.
+      <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '12rem', paddingInline: '2rem', textAlign: 'center' }}>
+        <h1 style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--foreground)' }}>
+          Select your <span style={{ fontStyle: 'italic', color: 'var(--accent-editorial)' }}>membership</span>
+        </h1>
+        <p style={{ color: 'var(--muted-foreground)', fontSize: '1.1rem', marginBottom: '6rem', maxWidth: '500px', marginInline: 'auto' }}>
+          Choose the tier that aligns with your professional aspirations.
         </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-          {PLANS.map((plan) => (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '0', border: '1px solid var(--border)', background: 'var(--bg-surface)' }}>
+          {PLANS.map((plan, index) => (
             <div 
               key={plan.name} 
-              className="glass" 
               style={{ 
-                padding: '3rem 2rem', 
-                borderRadius: '2rem', 
-                width: '350px',
+                padding: '4rem 3rem', 
                 textAlign: 'left',
                 position: 'relative',
-                border: plan.name === 'Pro' ? '1px solid #00BAFF' : '1px solid var(--glass-border)'
+                borderRight: index !== PLANS.length - 1 ? '1px solid var(--border)' : 'none',
+                background: plan.name === 'Pro' ? 'var(--background)' : 'transparent'
               }}
             >
               {plan.name === 'Pro' && (
                 <div style={{
                   position: 'absolute',
-                  top: '1rem',
-                  right: '1rem',
-                  background: 'rgba(0, 186, 255, 0.1)',
-                  color: '#00BAFF',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '1rem',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem'
-                }}>
-                  <Zap size={12} /> MOST POPULAR
-                </div>
+                  top: '0',
+                  left: '0',
+                  right: '0',
+                  height: '4px',
+                  background: 'var(--accent-editorial)',
+                }} />
               )}
 
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{plan.name}</h3>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <span style={{ fontSize: '3rem', fontWeight: 700 }}>${plan.price}</span>
-                <span style={{ color: 'hsl(var(--muted-foreground))' }}>/month</span>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, color: 'var(--foreground)' }}>{plan.name}</h3>
+              <div style={{ marginBottom: '2.5rem' }}>
+                <span style={{ fontSize: '4rem', fontWeight: 500, fontFamily: 'var(--font-serif)', color: 'var(--foreground)' }}>${plan.price}</span>
+                <span style={{ color: 'var(--muted-foreground)', fontSize: '1rem' }}>/month</span>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '4rem', flex: 1 }}>
                 {plan.features.map((feature, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.95rem' }}>
-                    <div style={{ 
-                      width: '20px', 
-                      height: '20px', 
-                      borderRadius: '50%', 
-                      background: 'rgba(0, 186, 255, 0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <Check size={12} color="#00BAFF" />
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', fontSize: '0.95rem', color: 'var(--foreground)' }}>
+                    <div style={{ marginTop: '3px' }}>
+                      <Check size={16} color="var(--accent-editorial)" />
                     </div>
-                    {feature}
+                    <span style={{ lineHeight: 1.5 }}>{feature}</span>
                   </div>
                 ))}
               </div>
@@ -74,9 +58,9 @@ export default function Pricing() {
               <a 
                 href={`/checkout/status?success=true`}
                 className={plan.name === 'Pro' ? 'btn btn-primary' : 'btn btn-secondary'} 
-                style={{ width: '100%', padding: '1rem' }}
+                style={{ width: '100%', padding: '1rem', justifyContent: 'center' }}
               >
-                {plan.price === 0 ? 'Start for Free' : 'Upgrade to Pro'}
+                {plan.price === 0 ? 'Start Free' : 'Select Pro'}
               </a>
             </div>
           ))}

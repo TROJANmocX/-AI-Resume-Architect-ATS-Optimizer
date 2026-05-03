@@ -19,7 +19,6 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("basic");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isRewriting, setIsRewriting] = useState<string | null>(null);
   const [showSaved, setShowSaved] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [currentTemplate, setCurrentTemplate] = useState(0);
@@ -38,7 +37,6 @@ export default function Dashboard() {
     if (!previewRef.current) return;
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        // True A4 height at 96dpi = 1123px
         setIsOverPageLimit(entry.contentRect.height > 1123);
       }
     });
@@ -118,22 +116,22 @@ export default function Dashboard() {
   };
 
   const SECTIONS = [
-    { id: 'jd', label: 'AI Strategy', icon: <Search size={20} />, category: 'AI' },
-    { id: 'basic', label: 'Identity', icon: <User size={20} />, category: 'CORE' },
-    { id: 'academics', label: 'Academics', icon: <GraduationCap size={20} />, category: 'CORE' },
-    { id: 'experience', label: 'History', icon: <Briefcase size={20} />, category: 'CORE' },
-    { id: 'projects', label: 'Projects', icon: <Layers size={20} />, category: 'CORE' },
-    { id: 'skills', label: 'Technical', icon: <FileCheck size={20} />, category: 'SKILLS' },
-    { id: 'languages', label: 'Linguistic', icon: <Globe size={20} />, category: 'SKILLS' },
-    { id: 'social', label: 'Links', icon: <MessageSquare size={20} />, category: 'SKILLS' },
-    { id: 'certifications', label: 'Verified Certs', icon: <ShieldCheck size={20} />, category: 'HONORS' },
-    { id: 'awards', label: 'Honors', icon: <Trophy size={20} />, category: 'HONORS' },
-    { id: 'publications', label: 'Research', icon: <BookOpen size={20} />, category: 'HONORS' },
-    { id: 'patents', label: 'Innovation', icon: <Lightbulb size={20} />, category: 'HONORS' },
-    { id: 'volunteering', label: 'Altruism', icon: <Heart size={20} />, category: 'OTHER' },
-    { id: 'competitions', label: 'Competitions', icon: <Presentation size={20} />, category: 'OTHER' },
-    { id: 'testScores', label: 'Test Scores', icon: <Microscope size={20} />, category: 'OTHER' },
-    { id: 'scholarships', label: 'Scholarships', icon: <Trophy size={20} />, category: 'OTHER' }
+    { id: 'jd', label: 'AI Strategy', icon: <Search size={18} /> },
+    { id: 'basic', label: 'Identity', icon: <User size={18} /> },
+    { id: 'academics', label: 'Academics', icon: <GraduationCap size={18} /> },
+    { id: 'experience', label: 'History', icon: <Briefcase size={18} /> },
+    { id: 'projects', label: 'Projects', icon: <Layers size={18} /> },
+    { id: 'skills', label: 'Technical', icon: <FileCheck size={18} /> },
+    { id: 'languages', label: 'Linguistic', icon: <Globe size={18} /> },
+    { id: 'social', label: 'Links', icon: <MessageSquare size={18} /> },
+    { id: 'certifications', label: 'Verified Certs', icon: <ShieldCheck size={18} /> },
+    { id: 'awards', label: 'Honors', icon: <Trophy size={18} /> },
+    { id: 'publications', label: 'Research', icon: <BookOpen size={18} /> },
+    { id: 'patents', label: 'Innovation', icon: <Lightbulb size={18} /> },
+    { id: 'volunteering', label: 'Altruism', icon: <Heart size={18} /> },
+    { id: 'competitions', label: 'Competitions', icon: <Presentation size={18} /> },
+    { id: 'testScores', label: 'Test Scores', icon: <Microscope size={18} /> },
+    { id: 'scholarships', label: 'Scholarships', icon: <Trophy size={18} /> }
   ];
 
   const downloadPDF = async () => {
@@ -156,34 +154,52 @@ export default function Dashboard() {
   };
 
   const renderLabel = (text: string) => (
-    <label style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', color: '#888', marginBottom: '0.5rem', display: 'block' }}>
+    <label style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted-foreground)', marginBottom: '0.5rem', display: 'block' }}>
       {text}
     </label>
   );
 
+  const getEditorialNote = (tabId: string) => {
+    switch (tabId) {
+      case 'jd': return "Paste the target job description to analyze keyword alignment and uncover the core narrative recruiters are looking for.";
+      case 'basic': return "Your professional identity. Keep the summary focused on strategic impact rather than generic objectives.";
+      case 'experience': return "Use strong action verbs. Quantify your impact with metrics wherever possible to demonstrate tangible value.";
+      case 'academics': return "Highlight academic rigor. Include GPA only if it is highly competitive, and list relevant coursework if applicable.";
+      case 'skills': return "Categorize technical and soft skills clearly. ATS parsers match these exactly against the job description.";
+      case 'projects': return "Focus on the problem solved, the technologies used, and the measurable outcome of your independent work.";
+      case 'certifications': return "Include only verifiable, industry-recognized certifications that are directly relevant to your target role.";
+      case 'awards': return "Detail the context of the award. Mention the selection criteria or the scale of the competition to convey prestige.";
+      case 'publications': return "List peer-reviewed research, industry articles, or major presentations. Use standard citation formats.";
+      case 'patents': return "Include patent numbers and a brief description of the innovation and its commercial application.";
+      case 'volunteering': return "Highlight altruistic work that demonstrates leadership, community engagement, or relevant soft skills.";
+      case 'competitions': return "Focus on hackathons or case competitions that show extreme dedication and high performance.";
+      case 'testScores': return "Include standardized test scores only if they are exceptionally high or required by the target industry.";
+      case 'scholarships': return "Mention merit-based financial awards. Specify if the scholarship was highly selective or prestigious.";
+      case 'languages': return "Specify your proficiency level (e.g., Native, Fluent, Conversational) to provide accurate expectations.";
+      case 'social': return "Ensure your LinkedIn profile and GitHub/Portfolio are up-to-date and reflect the narrative in this document.";
+      default: return "Ensure absolute alignment with your target role. Avoid unnecessary embellishments within text fields.";
+    }
+  };
+
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#0B0F1A', overflow: 'hidden', position: 'relative' }}>
-      {/* Ambient orbs */}
-      <div className="animate-breathe" style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(124,92,255,0.08) 0%, transparent 70%)', filter: 'blur(120px)', zIndex: 0 }} />
-      <div className="animate-breathe" style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 70%)', filter: 'blur(120px)', zIndex: 0, animationDelay: '3s' }} />
-      <div className="grain" style={{ zIndex: 1 }} />
+    <main className="theme-editorial" style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--background)', overflow: 'hidden' }}>
       
       {/* EXECUTIVE TOP BAR */}
-      <div style={{ padding: '0.75rem 2rem', background: 'rgba(11,15,26,0.85)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(124,92,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+      <div style={{ padding: '1rem 3rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, background: 'var(--background)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <h1 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#fff', letterSpacing: '-0.04em', margin: 0 }}>
-              CareerForge <span style={{ background: 'linear-gradient(135deg, #7C5CFF, #00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Studio</span>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--foreground)', letterSpacing: '0.02em', margin: 0, fontFamily: 'var(--font-serif)' }}>
+              CareerForge <span style={{ fontStyle: 'italic', color: 'var(--accent-editorial)' }}>Studio</span>
             </h1>
           </Link>
-          {showSaved && <span className="save-pulse" style={{ fontSize: '0.65rem', color: '#00D4FF', fontWeight: 800, letterSpacing: '0.05em' }}>✓ SYNCED</span>}
+          {showSaved && <span style={{ fontSize: '0.65rem', color: 'var(--foreground)', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>SAVED</span>}
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-           <button className="btn btn-secondary" onClick={() => setShowTemplateModal(true)} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
-              <Layout size={14} /> Change Template
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+           <button onClick={() => setShowTemplateModal(true)} style={{ background: 'transparent', border: 'none', fontSize: '0.8rem', color: 'var(--foreground)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <Layout size={14} /> Layout
            </button>
-           <button className="btn" onClick={downloadPDF} disabled={isDownloading} style={{ padding: '0.5rem 2rem', fontSize: '0.85rem', background: '#fff', color: '#000', borderRadius: '0.5rem', fontWeight: 700 }}>
-              {isDownloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} EXPORT PDF
+           <button onClick={downloadPDF} disabled={isDownloading} style={{ background: 'transparent', border: '1px solid var(--foreground)', padding: '0.5rem 1.5rem', fontSize: '0.8rem', color: 'var(--foreground)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em', transition: 'all 0.3s' }} onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--foreground)'; e.currentTarget.style.color = 'var(--background)'; }} onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--foreground)'; }}>
+              {isDownloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Export PDF
            </button>
         </div>
       </div>
@@ -191,80 +207,79 @@ export default function Dashboard() {
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         
         {/* SIDEBAR */}
-        <div style={{ width: '80px', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '0.75rem', background: 'rgba(0,0,0,0.2)', overflowY: 'auto', scrollbarWidth: 'none', zIndex: 10 }}>
+        <div style={{ width: '250px', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', padding: '2rem 0', gap: '0.5rem', overflowY: 'auto', scrollbarWidth: 'none' }}>
             {SECTIONS.map(s => (
                 <button 
                   key={s.id}
                   onClick={() => setActiveTab(s.id)}
                   style={{
-                    width: '44px', height: '44px', minHeight: '44px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: activeTab === s.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-                    border: activeTab === s.id ? '1px solid rgba(255,255,255,0.15)' : '1px solid transparent',
-                    color: activeTab === s.id ? '#fff' : '#666', cursor: 'pointer', transition: 'all 0.2s',
-                    position: 'relative'
+                    width: '100%', padding: '0.75rem 2rem', display: 'flex', alignItems: 'center', gap: '1rem',
+                    background: 'transparent', border: 'none', borderLeft: activeTab === s.id ? '2px solid var(--accent-editorial)' : '2px solid transparent',
+                    color: activeTab === s.id ? 'var(--foreground)' : 'var(--muted-foreground)', cursor: 'pointer', transition: 'all 0.2s',
+                    textAlign: 'left', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em'
                   }}
-                  title={s.label}
                 >
-                  {s.icon}
-                  {activeTab === s.id && <div className="sidebar-indicator" style={{ position: 'absolute', left: '-4px', width: '3px', height: '16px', background: '#fff', borderRadius: '2px' }} />}
+                  <span style={{ opacity: activeTab === s.id ? 1 : 0.6 }}>{s.icon}</span>
+                  {s.label}
                 </button>
             ))}
             <div style={{ height: '2rem', minHeight: '2rem' }} />
         </div>
 
         {/* EDITOR PANEL */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem 4rem', borderRight: '1px solid rgba(255,255,255,0.05)', scrollbarWidth: 'none', zIndex: 10, position: 'relative' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '4rem 5rem', scrollbarWidth: 'none', position: 'relative' }}>
             <div className="animate-fade-in" key={activeTab} style={{ maxWidth: '800px', margin: '0 auto' }}>
-                <h2 style={{ fontSize: '1.8rem', fontWeight: 600, marginBottom: '1.5rem', letterSpacing: '-0.02em', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
+                <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', color: 'var(--foreground)' }}>
                   {SECTIONS.find(s => s.id === activeTab)?.label}
                 </h2>
 
-                <div style={{ padding: '1rem 1.25rem', borderLeft: '3px solid #7C5CFF', background: 'linear-gradient(90deg, rgba(124,92,255,0.08) 0%, transparent 100%)', marginBottom: '2.5rem', display: 'flex', gap: '1rem', alignItems: 'flex-start', borderRadius: '0 0.5rem 0.5rem 0' }}>
-                    <Info size={18} color="#7C5CFF" style={{ marginTop: '2px', flexShrink: 0 }} />
-                    <span style={{ fontSize: '0.85rem', color: '#bbb', lineHeight: 1.5 }}>
-                      <strong style={{ color: '#fff' }}>ATS Strategy:</strong> Ensure absolute alignment with your target role. Avoid formatting elements like columns or progress bars within text fields.
+                <div style={{ padding: '1.5rem', border: '1px solid var(--border)', marginBottom: '3rem', display: 'flex', gap: '1rem', alignItems: 'flex-start', background: 'var(--bg-surface)' }}>
+                    <Info size={18} color="var(--accent-editorial)" style={{ marginTop: '2px', flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.9rem', color: 'var(--foreground)', lineHeight: 1.6 }}>
+                      <strong style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.1rem', marginRight: '0.5rem' }}>Editorial Note:</strong> 
+                      {getEditorialNote(activeTab)}
                     </span>
                 </div>
 
                 {activeTab === 'jd' && (
                     <>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                          {renderLabel("TARGET JOB DESCRIPTION")}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                          {renderLabel("Target Job Description")}
                           <textarea 
                               value={jdText} onChange={(e) => setJdText(e.target.value)}
-                              placeholder="Paste the target Job Description here to analyze keyword overlaps..."
-                              className="input-premium" style={{ height: '300px' }}
+                              placeholder="Paste the target Job Description here..."
+                              className="input-premium" style={{ height: '300px', padding: '1rem' }}
                           />
                         </div>
-                        <button onClick={handleAnalyze} disabled={isAnalyzing} style={{ width: '100%', marginTop: '1.5rem', padding: '1rem', background: '#fff', color: '#000', borderRadius: '0.75rem', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                        <button onClick={handleAnalyze} disabled={isAnalyzing} style={{ width: '100%', marginTop: '2rem', padding: '1rem', background: 'var(--foreground)', color: 'var(--background)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', transition: 'background 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--accent-editorial)'} onMouseLeave={(e) => e.currentTarget.style.background = 'var(--foreground)'}>
                             {isAnalyzing ? <Loader2 size={18} className="animate-spin" /> : <><Search size={18} /> Analyze Alignment</>}
                         </button>
 
                         {analysis && (
-                            <div className="animate-fade-in" style={{ marginTop: '2.5rem', padding: '2rem', background: 'rgba(0, 212, 255, 0.05)', border: '1px solid rgba(0, 212, 255, 0.2)', borderRadius: '1rem' }}>
-                                <h3 style={{ fontSize: '1.2rem', color: '#00D4FF', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <Sparkles size={18} /> Scan Complete
+                            <div className="animate-fade-in" style={{ marginTop: '4rem', padding: '3rem', border: '1px solid var(--border)', background: 'var(--bg-surface)' }}>
+                                <h3 style={{ fontSize: '1.5rem', color: 'var(--foreground)', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-serif)' }}>
+                                    Scan Complete
                                 </h3>
                                 
-                                <div style={{ marginBottom: '1.5rem' }}>
-                                    {renderLabel("CORE SUMMARY")}
-                                    <p style={{ color: '#ddd', lineHeight: 1.6, fontSize: '0.9rem' }}>{analysis.jdSummary}</p>
+                                <div style={{ marginBottom: '3rem' }}>
+                                    {renderLabel("Core Summary")}
+                                    <p style={{ color: 'var(--muted-foreground)', lineHeight: 1.8, fontSize: '1rem' }}>{analysis.jdSummary}</p>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
                                     <div>
-                                        {renderLabel("TOP KEYWORDS")}
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        {renderLabel("Top Keywords")}
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                             {analysis.topKeywords?.map((kw: string, i: number) => (
-                                                <span key={i} style={{ background: 'rgba(124, 92, 255, 0.15)', color: '#9B7CFF', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem', border: '1px solid rgba(124, 92, 255, 0.3)' }}>{kw}</span>
+                                                <span key={i} style={{ border: '1px solid var(--border)', padding: '0.4rem 1rem', fontSize: '0.8rem', color: 'var(--foreground)' }}>{kw}</span>
                                             ))}
                                         </div>
                                     </div>
                                     <div>
-                                        {renderLabel("ACTION VERBS")}
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        {renderLabel("Action Verbs")}
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                             {analysis.ActionKeywords?.map((kw: string, i: number) => (
-                                                <span key={i} style={{ background: 'rgba(0, 212, 255, 0.15)', color: '#00D4FF', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem', border: '1px solid rgba(0, 212, 255, 0.3)' }}>{kw}</span>
+                                                <span key={i} style={{ border: '1px solid var(--accent-editorial)', color: 'var(--accent-editorial)', padding: '0.4rem 1rem', fontSize: '0.8rem' }}>{kw}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -275,70 +290,70 @@ export default function Dashboard() {
                 )}
 
                 {activeTab === 'basic' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
                             <div>
-                                {renderLabel("LEGAL NAME")}
+                                {renderLabel("Legal Name")}
                                 <input value={resume.basic?.name || ''} onChange={(e) => updateSection('basic', {...resume.basic, name: e.target.value})} className="input-premium" />
                             </div>
                             <div>
-                                {renderLabel("CONTACT EMAIL")}
+                                {renderLabel("Contact Email")}
                                 <input value={resume.basic?.email || ''} onChange={(e) => updateSection('basic', {...resume.basic, email: e.target.value})} className="input-premium" />
                             </div>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
                             <div>
-                                {renderLabel("PHONE NUMBER")}
+                                {renderLabel("Phone Number")}
                                 <input value={resume.basic?.phone || ''} onChange={(e) => updateSection('basic', {...resume.basic, phone: e.target.value})} className="input-premium" />
                             </div>
                             <div>
-                                {renderLabel("LOCATION")}
+                                {renderLabel("Location")}
                                 <input value={resume.basic?.location || ''} onChange={(e) => updateSection('basic', {...resume.basic, location: e.target.value})} className="input-premium" />
                             </div>
                         </div>
                         <div>
-                            {renderLabel("LINKEDIN / PORTFOLIO")}
+                            {renderLabel("LinkedIn / Portfolio")}
                             <input value={resume.basic?.linkedin || ''} onChange={(e) => updateSection('basic', {...resume.basic, linkedin: e.target.value})} className="input-premium" />
                         </div>
                         <div>
-                            {renderLabel("PROFESSIONAL SUMMARY")}
+                            {renderLabel("Professional Summary")}
                             <textarea value={resume.basic?.summary || ''} onChange={(e) => updateSection('basic', {...resume.basic, summary: e.target.value})} placeholder="Strategic Professional Brief..." className="input-premium" style={{ minHeight: '160px' }} />
                         </div>
                     </div>
                 )}
 
                 {activeTab === 'experience' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                         {resume.experience?.map((exp: any, i: number) => (
-                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
-                                <button onClick={() => removeEntry('experience', i)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', padding: '0.5rem' }} title="Remove Entry">
-                                  <Trash2 size={16} />
+                            <div key={i} style={{ paddingBottom: '3rem', borderBottom: '1px solid var(--border)', position: 'relative' }}>
+                                <button onClick={() => removeEntry('experience', i)} style={{ position: 'absolute', top: '0', right: '0', background: 'transparent', border: 'none', color: 'var(--muted-foreground)', cursor: 'pointer', padding: '0.5rem', transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--destructive)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
+                                  <Trash2 size={18} />
                                 </button>
                                 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginBottom: '2.5rem' }}>
                                     <div>
-                                      {renderLabel("ORGANIZATION")}
+                                      {renderLabel("Organization")}
                                       <input value={exp.company || ''} onChange={(e) => updateEntry('experience', i, 'company', e.target.value)} className="input-premium" />
                                     </div>
                                     <div>
-                                      {renderLabel("ROLE TITLE")}
+                                      {renderLabel("Role Title")}
                                       <input value={exp.title || ''} onChange={(e) => updateEntry('experience', i, 'title', e.target.value)} className="input-premium" />
                                     </div>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginBottom: '3rem' }}>
                                     <div>
-                                      {renderLabel("DURATION")}
+                                      {renderLabel("Duration")}
                                       <input value={exp.date || ''} onChange={(e) => updateEntry('experience', i, 'date', e.target.value)} placeholder="e.g. Jan 2020 - Present" className="input-premium" />
                                     </div>
                                     <div>
-                                      {renderLabel("LOCATION")}
+                                      {renderLabel("Location")}
                                       <input value={exp.location || ''} onChange={(e) => updateEntry('experience', i, 'location', e.target.value)} className="input-premium" />
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    {renderLabel("IMPACT BULLETS")}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {renderLabel("Impact Statements")}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                         {exp.bullets?.map((b: string, j: number) => {
                                             const weak = getWeakVerbs(b);
                                             return (
@@ -348,74 +363,74 @@ export default function Dashboard() {
                                                 }} placeholder="Achieved X by implementing Y, resulting in Z..." style={{ minHeight: '80px', paddingRight: '2.5rem' }} />
                                                 <X onClick={() => {
                                                     const nb = [...exp.bullets]; nb.splice(j, 1); updateEntry('experience', i, 'bullets', nb);
-                                                }} size={14} style={{ position: 'absolute', top: '1rem', right: '1rem', color: '#666', cursor: 'pointer' }} />
+                                                }} size={14} style={{ position: 'absolute', top: '1rem', right: '0', color: 'var(--muted-foreground)', cursor: 'pointer' }} />
                                                 
                                                 {weak.length > 0 && (
-                                                    <div className="animate-fade-in" style={{ marginTop: '0.5rem', padding: '0.75rem', background: 'rgba(255, 170, 0, 0.05)', borderLeft: '2px solid #ffaa00', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                                                        <AlertCircle size={14} color="#ffaa00" style={{ marginTop: '2px' }} />
-                                                        <span style={{ fontSize: '0.75rem', color: '#ccc', lineHeight: 1.4 }}>
-                                                            Weak verb detected: <strong style={{ color: '#ffaa00' }}>"{weak[0]}"</strong>. Consider stronger action verbs.
+                                                    <div className="animate-fade-in" style={{ marginTop: '0.5rem', padding: '0.75rem', borderLeft: '1px solid var(--accent-editorial)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', background: 'var(--bg-surface)' }}>
+                                                        <AlertCircle size={14} color="var(--accent-editorial)" style={{ marginTop: '2px' }} />
+                                                        <span style={{ fontSize: '0.8rem', color: 'var(--foreground)', lineHeight: 1.4 }}>
+                                                            Weak verb detected: <strong style={{ fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>"{weak[0]}"</strong>. Consider stronger action verbs.
                                                         </span>
                                                     </div>
                                                 )}
                                             </div>
                                         )})}
-                                        <button onClick={() => updateEntry('experience', i, 'bullets', [...exp.bullets, ''])} style={{ alignSelf: 'flex-start', background: 'transparent', border: '1px dashed rgba(255,255,255,0.2)', color: '#aaa', padding: '0.75rem 1rem', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                          <Plus size={14} /> Add Bullet
+                                        <button onClick={() => updateEntry('experience', i, 'bullets', [...exp.bullets, ''])} style={{ alignSelf: 'flex-start', background: 'transparent', border: '1px solid var(--border)', color: 'var(--foreground)', padding: '0.75rem 1.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'border-color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--foreground)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}>
+                                          <Plus size={14} /> Add Statement
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         ))}
-                        <button onClick={() => addEntry('experience', { company: '', title: '', date: '', location: '', bullets: [''] })} style={{ width: '100%', padding: '1rem', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#fff', borderRadius: '1rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+                        <button onClick={() => addEntry('experience', { company: '', title: '', date: '', location: '', bullets: [''] })} style={{ width: '100%', padding: '1.25rem', background: 'transparent', border: '1px solid var(--border)', color: 'var(--foreground)', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', transition: 'border-color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--foreground)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}>
                           <Plus size={16} /> Add Experience
                         </button>
                     </div>
                 )}
 
                 {activeTab === 'academics' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                         {resume.academics?.map((edu: any, i: number) => (
-                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
-                                <button onClick={() => removeEntry('academics', i)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', padding: '0.5rem' }} title="Remove Entry">
-                                  <Trash2 size={16} />
+                            <div key={i} style={{ paddingBottom: '3rem', borderBottom: '1px solid var(--border)', position: 'relative' }}>
+                                <button onClick={() => removeEntry('academics', i)} style={{ position: 'absolute', top: '0', right: '0', background: 'transparent', border: 'none', color: 'var(--muted-foreground)', cursor: 'pointer', padding: '0.5rem', transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--destructive)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
+                                  <Trash2 size={18} />
                                 </button>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginBottom: '2.5rem' }}>
                                     <div>
-                                      {renderLabel("INSTITUTION")}
+                                      {renderLabel("Institution")}
                                       <input value={edu.school || edu.name || ''} onChange={(e) => updateEntry('academics', i, 'school', e.target.value)} className="input-premium" />
                                     </div>
                                     <div>
-                                      {renderLabel("DEGREE / MAJOR")}
+                                      {renderLabel("Degree / Major")}
                                       <input value={edu.degree || edu.detail || ''} onChange={(e) => updateEntry('academics', i, 'degree', e.target.value)} className="input-premium" />
                                     </div>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
                                     <div>
-                                      {renderLabel("TIMEFRAME")}
+                                      {renderLabel("Timeframe")}
                                       <input value={edu.year || edu.date || ''} onChange={(e) => updateEntry('academics', i, 'year', e.target.value)} className="input-premium" />
                                     </div>
                                     <div>
-                                      {renderLabel("GPA / HONORS")}
+                                      {renderLabel("GPA / Honors")}
                                       <input value={edu.gpa || ''} onChange={(e) => updateEntry('academics', i, 'gpa', e.target.value)} className="input-premium" />
                                     </div>
                                 </div>
                             </div>
                         ))}
-                        <button onClick={() => addEntry('academics', { school: '', degree: '', year: '', gpa: '' })} style={{ width: '100%', padding: '1rem', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#fff', borderRadius: '1rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+                        <button onClick={() => addEntry('academics', { school: '', degree: '', year: '', gpa: '' })} style={{ width: '100%', padding: '1.25rem', background: 'transparent', border: '1px solid var(--border)', color: 'var(--foreground)', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', transition: 'border-color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--foreground)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}>
                           <Plus size={16} /> Add Education
                         </button>
                     </div>
                 )}
 
                 {activeTab === 'skills' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                         <div>
-                            {renderLabel("TECHNICAL SKILLS (Comma Separated)")}
+                            {renderLabel("Technical Skills (Comma Separated)")}
                             <textarea value={resume.skills?.map((s:any) => s.name).join(', ') || ''} onChange={(e) => updateSection('skills', e.target.value.split(',').map(s => ({name: s.trim()})))} className="input-premium" style={{ minHeight: '120px' }} />
                         </div>
                         <div>
-                            {renderLabel("SOFT SKILLS & LINGUISTIC (Comma Separated)")}
+                            {renderLabel("Soft Skills & Linguistic (Comma Separated)")}
                             <textarea value={resume.languages?.map((l:any) => l.name).join(', ') || ''} onChange={(e) => updateSection('languages', e.target.value.split(',').map(s => ({name: s.trim()})))} className="input-premium" style={{ minHeight: '120px' }} />
                         </div>
                     </div>
@@ -423,27 +438,27 @@ export default function Dashboard() {
 
                 {/* UNIVERSAL EDITOR FOR ALL OTHER 12+ MODULES */}
                 {!['jd', 'basic', 'experience', 'academics', 'skills'].includes(activeTab) && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                         {resume[activeTab]?.map((item: any, i: number) => (
-                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '1rem', alignItems: 'flex-start', position: 'relative' }}>
+                            <div key={i} style={{ padding: '2rem 0', borderBottom: '1px solid var(--border)', display: 'flex', gap: '2rem', alignItems: 'flex-start', position: 'relative' }}>
                                 <div style={{ flex: 2 }}>
-                                  {renderLabel("ITEM NAME")}
+                                  {renderLabel("Item Name")}
                                   <input value={item.name || ''} onChange={(e) => updateEntry(activeTab, i, 'name', e.target.value)} className="input-premium" />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                  {renderLabel("DETAIL / PROVIDER")}
+                                  {renderLabel("Detail / Provider")}
                                   <input value={item.detail || ''} onChange={(e) => updateEntry(activeTab, i, 'detail', e.target.value)} className="input-premium" />
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                  {renderLabel("DATE / SCORE")}
+                                  {renderLabel("Date / Score")}
                                   <input value={item.date || ''} onChange={(e) => updateEntry(activeTab, i, 'date', e.target.value)} className="input-premium" />
                                 </div>
-                                <button onClick={() => removeEntry(activeTab, i)} style={{ marginTop: '1.75rem', background: 'transparent', border: 'none', color: '#666', cursor: 'pointer', padding: '0.5rem' }} title="Remove">
+                                <button onClick={() => removeEntry(activeTab, i)} style={{ marginTop: '2rem', background: 'transparent', border: 'none', color: 'var(--muted-foreground)', cursor: 'pointer', transition: 'color 0.3s' }} title="Remove" onMouseEnter={(e) => e.currentTarget.style.color = 'var(--destructive)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
                                   <Trash2 size={18} />
                                 </button>
                             </div>
                         ))}
-                        <button onClick={() => addEntry(activeTab, { name: '', detail: '', date: '' })} style={{ width: '100%', padding: '1rem', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#fff', borderRadius: '1rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', fontWeight: 600, marginTop: '1rem' }}>
+                        <button onClick={() => addEntry(activeTab, { name: '', detail: '', date: '' })} style={{ width: '100%', padding: '1.25rem', background: 'transparent', border: '1px solid var(--border)', color: 'var(--foreground)', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.85rem', transition: 'border-color 0.3s', marginTop: '2rem' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--foreground)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}>
                           <Plus size={16} /> Add Entry
                         </button>
                     </div>
@@ -454,18 +469,18 @@ export default function Dashboard() {
         {/* REAL-TIME ATS PREVIEW — A4 Print Stage */}
         <div style={{
           flex: 1, overflowY: 'auto', overflowX: 'auto',
-          background: '#1A1C23',
-          padding: '3rem 2rem',
+          background: 'var(--bg-surface)',
+          padding: '4rem',
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          borderLeft: '1px solid rgba(255,255,255,0.05)',
-          position: 'relative', zIndex: 10
+          borderLeft: '1px solid var(--border)',
+          position: 'relative'
         }}>
             {/* A4 label */}
-            <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#666', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>A4 Preview · 210 × 297 mm</span>
+            <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', fontWeight: 500, letterSpacing: '0.2em', textTransform: 'uppercase' }}>A4 Preview Document</span>
             </div>
 
-            {/* A4 paper card: 794 × 1123 px at 96 dpi */}
+            {/* A4 paper card */}
             <div
               ref={previewRef}
               style={{
@@ -473,8 +488,8 @@ export default function Dashboard() {
                 minHeight: '1123px',
                 height: 'fit-content',
                 background: '#ffffff',
-                boxShadow: '0 8px 40px rgba(0,0,0,0.4), 0 0 10px rgba(0,0,0,0.2)',
-                borderRadius: '4px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                border: '1px solid var(--border)',
                 overflow: 'hidden',
                 flexShrink: 0,
               }}
@@ -484,16 +499,16 @@ export default function Dashboard() {
 
             {/* FIT TO ONE PAGE WARNING */}
             <div style={{
-                position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 100,
-                background: isOverPageLimit ? 'rgba(255, 0, 85, 0.15)' : 'rgba(255, 255, 255, 0.1)',
-                border: isOverPageLimit ? '1px solid rgba(255,0,85,0.3)' : '1px solid rgba(255,255,255,0.1)',
-                padding: '0.75rem 1.25rem', borderRadius: '1rem',
-                display: 'flex', alignItems: 'center', gap: '0.75rem',
-                backdropFilter: 'blur(12px)', transition: 'all 0.3s'
+                position: 'fixed', bottom: '3rem', right: '3rem', zIndex: 100,
+                background: isOverPageLimit ? 'var(--bg-editorial)' : 'var(--bg-editorial)',
+                border: isOverPageLimit ? '1px solid var(--destructive)' : '1px solid var(--border)',
+                padding: '1rem 1.5rem',
+                display: 'flex', alignItems: 'center', gap: '1rem',
+                transition: 'all 0.3s'
             }}>
-                {isOverPageLimit ? <AlertCircle size={16} color="#FF0055" /> : <CheckCircle size={16} color="#fff" />}
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: isOverPageLimit ? '#FF0055' : '#fff' }}>
-                    {isOverPageLimit ? "Spilling to Page 2" : "1 Page Layout Optimal"}
+                {isOverPageLimit ? <AlertCircle size={18} color="var(--destructive)" /> : <CheckCircle size={18} color="var(--foreground)" />}
+                <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500, color: isOverPageLimit ? 'var(--destructive)' : 'var(--foreground)' }}>
+                    {isOverPageLimit ? "Spilling to Page 2" : "Optimal 1-Page Layout"}
                 </span>
             </div>
         </div>
@@ -502,24 +517,24 @@ export default function Dashboard() {
 
       {/* TEMPLATE ENGINE OVERLAY */}
       {showTemplateModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(11,15,26,0.95)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(30px)' }}>
-            <div className="glass-auth-card" style={{ width: '90%', maxWidth: '800px', padding: '4rem', borderRadius: '2rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3rem' }}>
-                    <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>Resume <span style={{ color: '#00D4FF' }}>Architectures</span></h2>
-                    <X onClick={() => setShowTemplateModal(false)} style={{ cursor: 'pointer', color: '#666' }} size={28} />
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(245,241,235,0.95)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '90%', maxWidth: '900px', padding: '5rem', background: 'var(--bg-editorial)', border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', alignItems: 'center' }}>
+                    <h2 style={{ fontSize: '3rem', color: 'var(--foreground)', fontFamily: 'var(--font-serif)' }}>Architecture <span style={{ fontStyle: 'italic', color: 'var(--accent-editorial)' }}>Selection</span></h2>
+                    <X onClick={() => setShowTemplateModal(false)} style={{ cursor: 'pointer', color: 'var(--foreground)' }} size={32} />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                    <div onClick={() => { setCurrentTemplate(0); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 0 ? '2px solid #00D4FF' : '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', background: currentTemplate === 0 ? 'rgba(0,212,255,0.05)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
-                        <h4 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Classic Pro</h4>
-                        <p style={{ fontSize: '0.9rem', color: '#888' }}>Clean, single-column design. Universally ATS safe.</p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+                    <div onClick={() => { setCurrentTemplate(0); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '3rem', border: currentTemplate === 0 ? '1px solid var(--foreground)' : '1px solid var(--border)', background: currentTemplate === 0 ? 'var(--bg-surface)' : 'transparent', transition: 'all 0.3s' }}>
+                        <h4 style={{ color: 'var(--foreground)', fontSize: '1.5rem', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>Classic Pro</h4>
+                        <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.6 }}>Clean, single-column design. Universally ATS safe and easily parsed.</p>
                     </div>
-                    <div onClick={() => { setCurrentTemplate(1); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 1 ? '2px solid #00D4FF' : '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', background: currentTemplate === 1 ? 'rgba(0,212,255,0.05)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
-                        <h4 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Modern Executive</h4>
-                        <p style={{ fontSize: '0.9rem', color: '#888' }}>Bold structured header. Highly ATS Friendly.</p>
+                    <div onClick={() => { setCurrentTemplate(1); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '3rem', border: currentTemplate === 1 ? '1px solid var(--foreground)' : '1px solid var(--border)', background: currentTemplate === 1 ? 'var(--bg-surface)' : 'transparent', transition: 'all 0.3s' }}>
+                        <h4 style={{ color: 'var(--foreground)', fontSize: '1.5rem', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>Modern Executive</h4>
+                        <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.6 }}>Bold structured header. Highly ATS Friendly with an elegant layout.</p>
                     </div>
-                    <div onClick={() => { setCurrentTemplate(2); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '2.5rem', border: currentTemplate === 2 ? '2px solid #00D4FF' : '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', background: currentTemplate === 2 ? 'rgba(0,212,255,0.05)' : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
-                        <h4 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Two-Column Clean</h4>
-                        <p style={{ fontSize: '0.9rem', color: '#888' }}>Skills sidebar configuration. ATS Friendly.</p>
+                    <div onClick={() => { setCurrentTemplate(2); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '3rem', border: currentTemplate === 2 ? '1px solid var(--foreground)' : '1px solid var(--border)', background: currentTemplate === 2 ? 'var(--bg-surface)' : 'transparent', transition: 'all 0.3s' }}>
+                        <h4 style={{ color: 'var(--foreground)', fontSize: '1.5rem', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>Two-Column Clean</h4>
+                        <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.6 }}>Skills sidebar configuration. ATS Friendly with spatial separation.</p>
                     </div>
                 </div>
             </div>
