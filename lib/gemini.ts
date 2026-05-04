@@ -1,8 +1,17 @@
+/**
+ * Gemini AI Service Layer
+ * Handles all interactions with the Google Gemini API for resume analysis and content generation.
+ */
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
+/**
+ * Analyzes a job description to extract key requirements and keywords.
+ * @param jdText The raw text of the job description.
+ * @returns An object containing hard skills, soft skills, action verbs, and a summary.
+ */
 export async function analyzeJobDescriptionWithGemini(jdText: string) {
   if (!genAI) {
     return { error: "Gemini API key is missing" };
@@ -28,6 +37,12 @@ export async function analyzeJobDescriptionWithGemini(jdText: string) {
   return JSON.parse(response.text());
 }
 
+/**
+ * Rewrites a resume bullet point to better align with target keywords.
+ * @param bulletPoint The original bullet point.
+ * @param targetKeywords The keywords to incorporate.
+ * @returns An object containing the rewritten bullet point.
+ */
 export async function rewriteBulletWithGemini(bulletPoint: string, targetKeywords: string[]) {
   if (!genAI) {
     return { error: "Gemini API key is missing" };

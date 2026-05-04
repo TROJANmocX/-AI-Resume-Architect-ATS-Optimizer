@@ -1,3 +1,8 @@
+/**
+ * Resume Preview Component
+ * Responsible for rendering the resume data into various ATS-friendly templates.
+ * Supports multiple layouts (Classic, Modern Executive, Two-Column) with high-fidelity styling.
+ */
 "use client";
 
 import React from 'react';

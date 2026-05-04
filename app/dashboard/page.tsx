@@ -1,3 +1,13 @@
+/**
+ * Dashboard Component
+ * The central workspace for resume creation and optimization.
+ * Features:
+ * - Real-time resume editing across multiple sections.
+ * - AI-powered Job Description analysis for keyword matching.
+ * - Live ATS-compliant resume preview (A4 format).
+ * - Local storage persistence for draft management.
+ * - PDF export functionality.
+ */
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -32,7 +42,7 @@ export default function Dashboard() {
   const [jdText, setJdText] = useState("");
   const [analysis, setAnalysis] = useState<any>(null);
 
-  // Pagination Height Checker
+  // ResizeObserver to detect if the resume content exceeds the A4 page height (1123px)
   useEffect(() => {
     if (!previewRef.current) return;
     const observer = new ResizeObserver((entries) => {
@@ -97,6 +107,10 @@ export default function Dashboard() {
     updateSection(section, current);
   };
 
+  /**
+   * Triggers the AI analysis of the job description.
+   * Calls the /api/analyze endpoint to extract keywords and summary.
+   */
   const handleAnalyze = async () => {
     if (!jdText) return;
     setIsAnalyzing(true);
@@ -134,6 +148,10 @@ export default function Dashboard() {
     { id: 'scholarships', label: 'Scholarships', icon: <Trophy size={18} /> }
   ];
 
+  /**
+   * Generates a PDF version of the current resume state.
+   * Sends the resume data to the /api/pdf endpoint.
+   */
   const downloadPDF = async () => {
     setIsDownloading(true);
     try {

@@ -1,3 +1,8 @@
+/**
+ * Resume Templates Data
+ * Contains pre-defined resume structures and sample data for different professional profiles.
+ * Used for initial state and template selection in the dashboard.
+ */
 export const RESUME_TEMPLATES = {
   indian_professional: {
     basic: {

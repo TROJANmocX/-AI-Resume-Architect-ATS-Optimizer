@@ -1,3 +1,8 @@
+/**
+ * Root Layout Component
+ * Defines the base HTML structure, global styles, and the Splash Screen wrapper.
+ * This is the entry point for all pages in the CareerForge Pro application.
+ */
 import "./globals.css";
 import type { Metadata } from "next";
 import SplashScreen from "@/components/SplashScreen";
