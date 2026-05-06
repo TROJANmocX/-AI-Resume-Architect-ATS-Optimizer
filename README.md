@@ -1,0 +1,46 @@
+# CareerForge Pro: The Applicant's Strategic Advantage
+
+CareerForge Pro is a sophisticated suite of tools engineered for the sole purpose of assisting human professionals in their ongoing conflict with Applicant Tracking Systems (ATS). While we cannot technically guarantee that a robot will not reject your resume, we have gone to great lengths to ensure that if it does, it will be because of your lack of experience, not our failure to properly highlight it.
+
+## Executive Summary
+
+The modern recruitment process is largely a game of semantic hide-and-seek. Employers hide what they want in a Job Description (JD), and applicants hide what they can do in a PDF. CareerForge Pro acts as a high-precision bridge between these two opaque entities. Our AI-driven agents scan, parse, and optimize your professional history to ensure that the keywords recruiters are looking for are exactly where the bots expect to find them.
+
+## Core Capabilities
+
+### 1. The JD Analysis Agent
+Our proprietary agent scrapes the target Job Description to identify and rank critical keywords. It distinguishes between actual technical requirements (Hard Skills) and the corporate adjectives often used to fill space (Soft Skills). It prioritizes the former while gracefully incorporating the latter.
+
+### 2. Contextual AI Rewriting
+Utilizing advanced prompt engineering, our system rewrites your professional experience bullets. The goal is to maximize your "ATS Match Score" without making you sound like a sentient toaster. We aim for impact-driven professional prose that satisfies both the algorithmic gatekeepers and the humans who eventually read the result.
+
+### 3. Tiered SaaS Model
+We offer a structured subscription model integrated via Stripe. The Free tier allows for a single, cautious attempt at a new career. The Pro tier offers unlimited resumes and cover letters for those who have a more aggressive approach to the job market.
+
+### 4. High-Fidelity PDF Rendering
+Leveraging Puppeteer and Headless Chrome, the application renders complex React components into pixel-perfect, non-editable PDF documents. This ensures that your formatting remains intact, even when subjected to the harsh environment of a corporate database.
+
+## Technical Infrastructure
+
+This application is built using a modern full-stack architecture:
+- Framework: Next.js (App Router)
+- Logic: TypeScript
+- Style: Vanilla CSS (Glassmorphism design language)
+- Analysis: OpenAI GPT-4o-mini
+- Payments: Stripe SDK
+- Export Engine: Puppeteer
+
+## Installation for Technical Personnel
+
+1. Clone the repository to your local environment.
+2. Execute `npm install` and wait for the dependencies to resolve their differences.
+3. Construct a `.env` file based on the provided `.env.example`.
+4. Run `npm run dev` to launch the development server.
+5. Navigate to localhost:3000 and witness the future of professional tailoring.
+
+## Disclosure
+
+CareerForge Pro is designed to help you tell the best possible version of the truth. We are not responsible for any existential dread caused by realizing how much of your career is defined by keywords.
+
+---
+Managed by the CareerForge Pro Development Team.
