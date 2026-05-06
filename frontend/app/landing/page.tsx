@@ -54,7 +54,7 @@ export default function Home() {
               color: 'rgba(26,26,26,0.7)', 
               maxWidth: '500px', 
               marginBottom: '4rem',
-              animationDelay: '0.2s',
+              animationDelay: '10s',
               lineHeight: 1.6,
               fontWeight: 300
             }}>

@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [showSaved, setShowSaved] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [currentTemplate, setCurrentTemplate] = useState(0);
+  const [userName, setUserName] = useState("");
 
   // Pagination Warning State
   const previewRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,22 @@ export default function Dashboard() {
   const [resume, setResume] = useState<any>(RESUME_TEMPLATES.indian_professional);
   const [jdText, setJdText] = useState("");
   const [analysis, setAnalysis] = useState<any>(null);
+
+  // Auth check: redirect to login if no token
+  useEffect(() => {
+    const token = localStorage.getItem("cf_token");
+    const user = localStorage.getItem("cf_user");
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+    if (user) {
+      try {
+        const parsed = JSON.parse(user);
+        setUserName(parsed.name || "");
+      } catch {}
+    }
+  }, []);
 
   // ResizeObserver to detect if the resume content exceeds the A4 page height (1123px)
   useEffect(() => {
@@ -72,10 +89,29 @@ export default function Dashboard() {
     }
   }, []);
 
-  const saveToStorage = useCallback((data: any) => {
+  const saveToStorage = useCallback(async (data: any) => {
+    // Keep local storage as a fallback
     localStorage.setItem("forge_ultimate_v1", JSON.stringify(data));
-    setShowSaved(true);
-  }, []);
+    
+    // Sync with MongoDB using real user ID
+    try {
+      const user = localStorage.getItem("cf_user");
+      const userId = user ? JSON.parse(user).id : "anonymous-user";
+      await fetch("http://localhost:5000/api/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          resumeData: data,
+          jdText: jdText,
+          analysis: analysis
+        }),
+      });
+      setShowSaved(true);
+    } catch (e) {
+      console.error("Cloud Sync Error", e);
+    }
+  }, [jdText, analysis]);
 
   useEffect(() => {
     if (showSaved) {
@@ -115,7 +151,7 @@ export default function Dashboard() {
     if (!jdText) return;
     setIsAnalyzing(true);
     try {
-        const res = await fetch("/api/analyze", {
+        const res = await fetch("http://localhost:5000/api/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ jdText }),
@@ -155,7 +191,7 @@ export default function Dashboard() {
   const downloadPDF = async () => {
     setIsDownloading(true);
     try {
-      const res = await fetch("/api/pdf", {
+      const res = await fetch("http://localhost:5000/api/pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(resume),
