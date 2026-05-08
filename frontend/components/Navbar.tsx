@@ -1,11 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const isDashboard = pathname.startsWith('/dashboard');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, [pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    router.push('/');
+  };
 
   return (
     <>
@@ -62,29 +77,64 @@ export default function Navbar() {
           {!isDashboard && (
             <>
               <Link href="/pricing" className="nav-link">Pricing</Link>
+              {isLoggedIn && <Link href="/dashboard" className="nav-link">Dashboard</Link>}
             </>
           )}
           
           {isDashboard ? (
-            <Link href="/pricing" style={{ 
-              fontSize: '0.85rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              color: 'var(--accent-editorial)',
-              borderBottom: '1px solid var(--accent-editorial)',
-              paddingBottom: '2px',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--foreground)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--accent-editorial)'}
-            >
-              Upgrade
-            </Link>
+            <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+              <Link href="/pricing" style={{ 
+                fontSize: '0.85rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: 'var(--accent-editorial)',
+                borderBottom: '1px solid var(--accent-editorial)',
+                paddingBottom: '2px',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--accent-editorial)'}
+              >
+                Upgrade
+              </Link>
+              <button 
+                onClick={handleLogout}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '0.85rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: 'var(--muted-foreground)',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+              >
+                Sign Out
+              </button>
+            </div>
           ) : (
-            <Link href="/login" className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '0.85rem' }}>
-              Optimize Resume
-            </Link>
+            isLoggedIn ? (
+              <button 
+                onClick={handleLogout}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '0.85rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: 'var(--muted-foreground)',
+                  cursor: 'pointer'
+                }}
+              >
+                Sign Out
+              </button>
+            ) : (
+              <Link href="/login" className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '0.85rem' }}>
+                Optimize Resume
+              </Link>
+            )
           )}
         </div>
       </nav>

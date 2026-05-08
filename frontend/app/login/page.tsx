@@ -31,8 +31,8 @@ export default function Login() {
       };
       const mockToken = "admin.jwt.token." + Date.now();
 
-      localStorage.setItem('cf_token', mockToken);
-      localStorage.setItem('cf_user', JSON.stringify(mockUser));
+      localStorage.setItem('token', mockToken);
+      localStorage.setItem('user', JSON.stringify(mockUser));
       
       setSuccess('Admin Bypass Successful!');
       setTimeout(() => {
@@ -60,8 +60,8 @@ export default function Login() {
       }
 
       // Save token and user info to localStorage
-      localStorage.setItem('cf_token', data.token);
-      localStorage.setItem('cf_user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
       setSuccess(isLogin ? 'Welcome back!' : 'Account created successfully!');
 
@@ -86,8 +86,8 @@ export default function Login() {
     // Create a dummy JWT-like string
     const mockToken = "mock.jwt.token." + Date.now();
 
-    localStorage.setItem('cf_token', mockToken);
-    localStorage.setItem('cf_user', JSON.stringify(mockUser));
+    localStorage.setItem('token', mockToken);
+    localStorage.setItem('user', JSON.stringify(mockUser));
     
     router.push('/dashboard');
   };
@@ -216,8 +216,18 @@ export default function Login() {
             </p>
           </div>
 
+          <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
+            <button 
+              onClick={handleGuestAccess}
+              style={{ width: '100%', background: 'transparent', border: '1px solid var(--border)', padding: '1rem', color: 'var(--muted-foreground)', cursor: 'pointer', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', transition: 'all 0.3s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--foreground)'; e.currentTarget.style.color = 'var(--foreground)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--muted-foreground)'; }}
+            >
+              Continue as Guest
+            </button>
+          </div>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
   );
 }

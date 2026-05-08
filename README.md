@@ -30,13 +30,46 @@ This application is built using a modern full-stack architecture:
 - Payments: Stripe SDK
 - Export Engine: Puppeteer
 
-## Installation for Technical Personnel
+## Installation & Setup
 
-1. Clone the repository to your local environment.
-2. Execute `npm install` and wait for the dependencies to resolve their differences.
-3. Construct a `.env` file based on the provided `.env.example`.
-4. Run `npm run dev` to launch the development server.
-5. Navigate to localhost:3000 and witness the future of professional tailoring.
+This is a monorepo containing both the frontend (Next.js) and backend (Express/Node.js).
+
+### Prerequisites
+- Node.js (v18+)
+- MongoDB Atlas account
+- Stripe account (for payments)
+- Gemini or OpenAI API key (for AI features)
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/TROJANmocX/-AI-Resume-Architect-ATS-Optimizer.git
+cd -AI-Resume-Architect-ATS-Optimizer
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+# Copy .env.example and fill in your keys
+cp .env.example .env
+npm run dev
+```
+
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+# Copy .env.example and fill in your keys
+cp .env.example .env
+npm run dev
+```
+
+### 4. Stripe Webhooks (Local Testing)
+To handle subscription updates locally, use the Stripe CLI:
+```bash
+stripe listen --forward-to localhost:5000/api/stripe/webhook
+```
+Copy the signing secret into your `backend/.env` as `STRIPE_WEBHOOK_SECRET`.
 
 ## Disclosure
 

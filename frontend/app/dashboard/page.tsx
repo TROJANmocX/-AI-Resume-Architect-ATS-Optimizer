@@ -45,8 +45,8 @@ export default function Dashboard() {
 
   // Auth check: redirect to login if no token
   useEffect(() => {
-    const token = localStorage.getItem("cf_token");
-    const user = localStorage.getItem("cf_user");
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
     if (!token) {
       window.location.href = "/login";
       return;
@@ -95,7 +95,7 @@ export default function Dashboard() {
     
     // Sync with MongoDB using real user ID
     try {
-      const user = localStorage.getItem("cf_user");
+      const user = localStorage.getItem("user");
       const userId = user ? JSON.parse(user).id : "anonymous-user";
       await fetch("http://localhost:5000/api/save", {
         method: "POST",

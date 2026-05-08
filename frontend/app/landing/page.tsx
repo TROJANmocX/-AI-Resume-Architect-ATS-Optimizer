@@ -6,9 +6,12 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
   }, []);
 
   if (!mounted) return null;
@@ -54,7 +57,6 @@ export default function Home() {
               color: 'rgba(26,26,26,0.7)', 
               maxWidth: '500px', 
               marginBottom: '4rem',
-              animationDelay: '10s',
               lineHeight: 1.6,
               fontWeight: 300
             }}>
@@ -62,7 +64,7 @@ export default function Home() {
             </p>
 
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <Link href="/login" style={{ 
+              <Link href={isLoggedIn ? "/dashboard" : "/login"} style={{ 
                 display: 'inline-block',
                 padding: '1.2rem 3rem', 
                 fontSize: '1rem', 
@@ -82,7 +84,7 @@ export default function Home() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
               >
-                Optimize Resume
+                {isLoggedIn ? "Go to Dashboard" : "Optimize Resume"}
               </Link>
             </div>
           </div>
@@ -187,7 +189,7 @@ export default function Home() {
             <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', marginBottom: '3rem' }}>
                 Get noticed in seconds.
             </h2>
-            <Link href="/login" style={{ 
+            <Link href={isLoggedIn ? "/dashboard" : "/login"} style={{ 
               display: 'inline-block',
               padding: '1.2rem 4rem', 
               fontSize: '1rem', 
@@ -208,7 +210,7 @@ export default function Home() {
               e.currentTarget.style.color = 'var(--text-editorial)';
             }}
             >
-                Improve My Resume
+                {isLoggedIn ? "Go to Dashboard" : "Improve My Resume"}
             </Link>
         </section>
       </main>

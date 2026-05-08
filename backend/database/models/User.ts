@@ -19,6 +19,24 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: 6,
   },
+  // Stripe Billing Fields
+  stripeCustomerId: {
+    type: String,
+    default: null,
+  },
+  stripeSubscriptionId: {
+    type: String,
+    default: null,
+  },
+  stripePriceId: {
+    type: String,
+    default: null,
+  },
+  subscriptionStatus: {
+    type: String,
+    enum: ['active', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', 'trialing', 'none'],
+    default: 'none',
+  },
   createdAt: {
     type: Date,
     default: Date.now,
