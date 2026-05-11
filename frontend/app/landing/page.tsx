@@ -87,6 +87,56 @@ export default function Home() {
                 {isLoggedIn ? "Go to Dashboard" : "Optimize Resume"}
               </Link>
             </div>
+
+            <div className="animate-fade-in" style={{ 
+              marginTop: '6rem', 
+              borderTop: '1px solid rgba(26,26,26,0.1)', 
+              paddingTop: '2rem',
+              animationDelay: '0.4s'
+            }}>
+              <p style={{ 
+                fontSize: '0.75rem', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.15em', 
+                color: 'rgba(26,26,26,0.4)',
+                marginBottom: '1.5rem',
+                fontWeight: 600
+              }}>
+                Trusted by professionals from
+              </p>
+              <div style={{ 
+                display: 'flex', 
+                gap: 'clamp(1.5rem, 4vw, 3rem)', 
+                alignItems: 'center', 
+                flexWrap: 'wrap',
+                opacity: 0.6
+              }}>
+                {['Goldman Sachs', 'McKinsey & Co', 'Google', 'Tesla', 'Amazon'].map((brand) => (
+                  <span key={brand} style={{ 
+                    fontSize: '0.9rem', 
+                    fontWeight: 500, 
+                    letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-serif)',
+                    fontStyle: 'italic',
+                    transition: 'all 0.4s ease',
+                    cursor: 'default'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                    e.currentTarget.style.color = 'var(--accent-editorial)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.6';
+                    e.currentTarget.style.color = 'inherit';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                  >
+                    {brand}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
