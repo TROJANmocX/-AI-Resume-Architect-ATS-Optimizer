@@ -23,18 +23,19 @@ export default function Login() {
     setIsLoading(true);
 
     // UNIVERSAL BYPASS LOGIN
-    if (email === "admin@careerforge.com" && password === "admin123") {
+    if (email === "demo@careerforge.com" && password === "demo123") {
       const mockUser = {
-        id: "admin-master-key",
-        name: "Admin User",
-        email: "admin@careerforge.com"
+        id: "demo-premium-user",
+        name: "Demo Premium",
+        email: "demo@careerforge.com",
+        subscriptionStatus: "active"
       };
-      const mockToken = "admin.jwt.token." + Date.now();
+      const mockToken = "demo.jwt.token." + Date.now();
 
       localStorage.setItem('token', mockToken);
       localStorage.setItem('user', JSON.stringify(mockUser));
       
-      setSuccess('Admin Bypass Successful!');
+      setSuccess('Premium Demo Bypass Successful!');
       setTimeout(() => {
         router.push('/dashboard');
       }, 800);
@@ -85,6 +86,23 @@ export default function Login() {
     localStorage.setItem('token', mockToken);
     localStorage.setItem('user', JSON.stringify(mockUser));
     router.push('/dashboard');
+  };
+
+  const handleDemoPremiumLogin = () => {
+    const mockUser = {
+      id: "demo-premium-user",
+      name: "Demo Premium",
+      email: "demo@careerforge.com",
+      subscriptionStatus: "active"
+    };
+    const mockToken = "demo.jwt.token." + Date.now();
+    localStorage.setItem('token', mockToken);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    
+    setSuccess('Premium Demo Login Successful!');
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 800);
   };
 
   return (
@@ -338,8 +356,23 @@ export default function Login() {
               </p>
             </div>
 
-            <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
+            <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <button 
+                type="button"
+                onClick={handleDemoPremiumLogin}
+                style={{ 
+                  width: '100%', background: 'transparent', border: '1px solid var(--accent-editorial)', 
+                  color: 'var(--accent-editorial)', cursor: 'pointer', padding: '0.75rem',
+                  fontSize: '0.75rem', textTransform: 'uppercase', 
+                  letterSpacing: '0.15em', transition: 'all 0.3s' 
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-editorial)'; e.currentTarget.style.color = 'var(--bg-surface)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--accent-editorial)'; }}
+              >
+                Login as Premium Demo
+              </button>
+              <button 
+                type="button"
                 onClick={handleGuestAccess}
                 style={{ 
                   width: '100%', background: 'transparent', border: 'none', 

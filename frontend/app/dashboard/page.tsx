@@ -590,6 +590,10 @@ export default function Dashboard() {
                         <h4 style={{ color: 'var(--foreground)', fontSize: '1.5rem', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>Two-Column Clean</h4>
                         <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.6 }}>Skills sidebar configuration. ATS Friendly with spatial separation.</p>
                     </div>
+                    <div onClick={() => { setCurrentTemplate(3); setShowTemplateModal(false); }} style={{ cursor: 'pointer', padding: '3rem', border: currentTemplate === 3 ? '1px solid var(--accent-editorial)' : '1px solid var(--border)', background: currentTemplate === 3 ? 'var(--bg-surface)' : 'transparent', transition: 'all 0.3s' }}>
+                        <h4 style={{ color: 'var(--accent-editorial)', fontSize: '1.5rem', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>Editorial Premium</h4>
+                        <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.6 }}>Luxury editorial typography with ATS-safe structuring. Perfect for executive roles.</p>
+                    </div>
                 </div>
             </div>
         </div>
