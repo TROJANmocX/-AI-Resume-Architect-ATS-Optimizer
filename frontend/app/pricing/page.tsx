@@ -125,6 +125,7 @@ export default function Pricing() {
           {PLANS.map((plan, index) => (
             <div
               key={plan.name}
+              className={`pricing-card ${plan.name === 'Pro' ? 'pricing-card-pro' : ''}`}
               style={{
                 padding: '4rem 3rem',
                 textAlign: 'left',
@@ -264,6 +265,17 @@ export default function Pricing() {
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+        .pricing-card {
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pricing-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+          z-index: 10;
+        }
+        .pricing-card-pro {
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
       `}</style>
     </main>
   );
