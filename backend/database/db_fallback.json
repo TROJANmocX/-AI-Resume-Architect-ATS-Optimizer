@@ -1,0 +1,172 @@
+{
+  "users": [
+    {
+      "_id": "fallback-jn4eyimm2",
+      "name": "Test User",
+      "email": "test@careerforge.local",
+      "passwordHash": "$2b$12$5nrexURxh87yVlhXCCpBYeqUDa8NXNHaFmPf4wVLYbHz13nV6kaFO",
+      "subscriptionStatus": "none",
+      "stripeCustomerId": null,
+      "stripeSubscriptionId": null,
+      "stripePriceId": null,
+      "createdAt": "2026-05-20T10:07:40.255Z"
+    }
+  ],
+  "resumes": [
+    {
+      "_id": "fallback-t8qp2mt0b",
+      "userId": "demo-premium-user",
+      "resumeData": {
+        "basic": {
+          "name": "Mayank Parashar",
+          "email": "mayankparashar2808@gmail.com",
+          "phone": "",
+          "location": "ML Developer specializing in LLM orchestration, RA",
+          "summary": "Strategic, high-impact technology leader with extensive experience spearheading digital transformations and scaling enterprise cloud systems."
+        },
+        "academics": [
+          {
+            "school": "UC Berkeley",
+            "degree": "Master of Science in Computer Science",
+            "year": "2018",
+            "gpa": "3.9"
+          }
+        ],
+        "experience": [
+          {
+            "company": "CloudScale Inc.",
+            "title": "Lead Cloud Architect",
+            "date": "2021 - Present",
+            "location": "San Francisco, CA",
+            "bullets": [
+              "Spearheaded migration of legacy services to AWS, reducing latency by 42%.",
+              "Managed and mentored a team of 8 senior developers.",
+              "Designed high-throughput GraphQL APIs processing 5M+ daily requests."
+            ]
+          },
+          {
+            "company": "DevCorp",
+            "title": "Senior Software Engineer",
+            "date": "2018 - 2021",
+            "location": "San Francisco, CA",
+            "bullets": [
+              "Developed and launched a collaborative real-time editor using Socket.io.",
+              "Optimized database indexing to boost query response times by 30%."
+            ]
+          }
+        ],
+        "projects": [
+          {
+            "name": "CareerForge AI Resume Builder",
+            "detail": "Built a premium, high-fidelity resume creation and ATS optimization platform.",
+            "date": "2025"
+          }
+        ],
+        "skills": [
+          {
+            "name": "TypeScript"
+          },
+          {
+            "name": "Node.js"
+          },
+          {
+            "name": "React"
+          },
+          {
+            "name": "Go"
+          },
+          {
+            "name": "AWS"
+          },
+          {
+            "name": "Docker"
+          },
+          {
+            "name": "Kubernetes"
+          },
+          {
+            "name": "MongoDB"
+          },
+          {
+            "name": "SQL"
+          },
+          {
+            "name": "Java"
+          }
+        ],
+        "languages": [
+          {
+            "name": "English"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "AWS Certified Solutions Architect - Professional",
+            "detail": "Amazon Web Services",
+            "date": "2024"
+          }
+        ],
+        "awards": [
+          {
+            "name": "Engineering Excellence Award",
+            "detail": "CloudScale Inc.",
+            "date": "2023"
+          }
+        ],
+        "publications": [],
+        "patents": [],
+        "volunteering": [],
+        "competitions": [],
+        "testScores": [],
+        "scholarships": [],
+        "social": []
+      },
+      "jdText": "",
+      "analysis": null,
+      "lastModified": "2026-05-20T11:57:16.641Z"
+    }
+  ],
+  "templates": [
+    {
+      "_id": "fallback-jxief5sj9",
+      "name": "Premium Gold Classic",
+      "description": "A luxury editorial layout with sophisticated typography.",
+      "resumeData": {
+        "basic": {
+          "name": "John Doe",
+          "email": "john@example.com",
+          "phone": "123-456-7890",
+          "location": "New York, NY",
+          "summary": "Experienced Software Engineer specialising in robust backends."
+        },
+        "experience": [
+          {
+            "title": "Senior Software Engineer",
+            "company": "Tech Corp",
+            "date": "2023 - Present",
+            "bullets": [
+              "Architected scalable microservices",
+              "Led a team of 5 engineers"
+            ]
+          }
+        ],
+        "academics": [
+          {
+            "degree": "B.S. Computer Science",
+            "school": "State University",
+            "year": "2020"
+          }
+        ],
+        "skills": [
+          {
+            "name": "Node.js"
+          },
+          {
+            "name": "TypeScript"
+          }
+        ]
+      },
+      "createdAt": "2026-05-20T10:27:16.794Z"
+    }
+  ]
+}

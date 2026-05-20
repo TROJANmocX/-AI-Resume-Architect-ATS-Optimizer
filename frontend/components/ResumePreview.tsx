@@ -387,10 +387,11 @@ export default function ResumePreview({ data, templateId = 0 }: { data: any, tem
         background: 'white',
         color: 'black',
         width: '794px',
-        minHeight: '1123px',
+        height: '1123px',
         boxSizing: 'border-box',
         padding: templateId === 2 ? 0 : '56px 64px',
         position: 'relative',
+        overflow: 'hidden',
       }}>
         {templateId === 0 && <ClassicPro />}
         {templateId === 1 && <ModernExecutive />}

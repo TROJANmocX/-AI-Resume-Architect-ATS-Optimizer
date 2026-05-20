@@ -35,8 +35,19 @@ export const RESUME_TEMPLATES = {
       }
     ],
     projects: [{ name: "BhimPay Integration", description: "Seamless UPI integration for 500+ merchant partners across India." }],
-    skills: ["React", "GoLang", "PostgreSQL", "Kafka", "AWS", "UPI Integration"],
-    languages: ["English (Professional)", "Hindi (Native)", "Kannada (Fluent)"],
+    skills: [
+      { name: "React" },
+      { name: "GoLang" },
+      { name: "PostgreSQL" },
+      { name: "Kafka" },
+      { name: "AWS" },
+      { name: "UPI Integration" }
+    ],
+    languages: [
+      { name: "English (Professional)" },
+      { name: "Hindi (Native)" },
+      { name: "Kannada (Fluent)" }
+    ],
     certifications: [{ name: "Google Certified Professional Cloud Architect" }],
     awards: [{ name: "Star Performer of the Year", giver: "Zomato Tech Team" }]
   },
@@ -61,8 +72,18 @@ export const RESUME_TEMPLATES = {
       }
     ],
     projects: [{ name: "OpenAI Proxy", description: "Edge-cached gateway for LLMs built with Rust." }],
-    skills: ["React", "TypeScript", "Node.js", "Rust", "AWS", "Kubernetes"],
-    languages: ["English (Native)", "Spanish (Fluent)"],
+    skills: [
+      { name: "React" },
+      { name: "TypeScript" },
+      { name: "Node.js" },
+      { name: "Rust" },
+      { name: "AWS" },
+      { name: "Kubernetes" }
+    ],
+    languages: [
+      { name: "English (Native)" },
+      { name: "Spanish (Fluent)" }
+    ],
     certifications: [{ name: "AWS Solutions Architect Professional" }]
   }
 };

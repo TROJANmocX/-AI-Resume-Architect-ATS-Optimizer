@@ -342,3 +342,10 @@ textarea {
 .btn-oauth:hover {
   border-color: var(--foreground);
 }
+
+/* Responsive login left panel */
+@media (min-width: 768px) {
+  .login-left-panel {
+    display: flex !important;
+  }
+}

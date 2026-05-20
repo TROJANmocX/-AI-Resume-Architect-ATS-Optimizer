@@ -137,7 +137,7 @@ export default function Login() {
           padding: '4rem',
           overflow: 'hidden',
           background: 'var(--text-editorial)'
-        }} className="md:flex">
+        }} className="login-left-panel">
           {/* Background Image with Overlay */}
           <div style={{
             position: 'absolute',
